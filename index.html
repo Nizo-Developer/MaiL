@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@400..800&family=Varela+Round&display=swap" rel="stylesheet">
+  <title>Mail</title>
+  <style>
+    * {
+      font-family: monospace;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #16161b;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+    }
+
+    .form {
+      min-width: 300px;
+      width: 400px;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: center;
+      transition: all 0.3s ease;
+      padding-block: 50px;
+
+      button {
+        margin-top: 20px;
+      }
+
+      input {
+        padding-bottom: 10px;
+      }
+
+      label {
+        margin-top: 8px;
+        font-size: 18px;
+        color: white;
+        background-color: transparent;
+        border: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-bottom: -45px;
+      }
+
+      input, textarea {  
+        height: auto;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid white;
+        color: white;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        
+        &:focus {
+          outline: none;
+        }
+
+      }
+
+      textarea {
+        width: 100%;
+        padding: 0;
+        padding-block: 3px;
+        resize: none;
+      }
+
+      .label2 {
+        margin-top: 30px;
+        margin-bottom: -55px;
+      }
+      
+      #title {
+        &:focus ~ .label1 {
+          letter-spacing: 5px;
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+        &:placeholder-shown ~ .label1 {
+          color: white;
+        }
+        &:not(:placeholder-shown) ~ .label1 {
+          color: lime;
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+      }
+      #description {
+        &:focus ~ .label2 {
+          letter-spacing: 5px;
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+        &:placeholder-shown ~ .label2 {
+          color: white;
+        }
+        &:not(:placeholder-shown) ~ .label2 {
+          color: lime;  
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+      }
+      /* input:focus ~ .label1 {
+        letter-spacing: 5px;
+      }
+      textarea:focus ~ .label2 {
+        letter-spacing: 5px;
+      }
+      input:placeholder-shown ~ .label1 {
+        color: white;
+      }
+      textarea:placeholder-shown ~ .label2 {
+        color: white;
+      }
+      input:not(:placeholder-shown) ~ .label1 {
+        color: lime;
+      }
+      textarea:not(:placeholder-shown) ~ .label2 {
+        color: lime;
+      } */
+    }
+
+
+    .preview {
+      min-height: 100vh;
+      min-width: 300px;
+      position: relative;
+      /* display: flex;
+      flex-direction: column;
+      justify-content: center; */
+
+      p {
+        color: white;
+        font-size: 24px;
+        margin: 10px;
+        margin-left: -20px;
+      }
+    }
+
+    .preview-content {
+      height: fit-content;
+      width: fit-content;
+      position: fixed;
+      top: 20%;
+    }
+
+    .result {
+      border: 1px solid white;
+      color: white;
+      word-wrap: break-word;
+      height: 300px;
+      width: 300px;
+      padding: 3px;
+    }
+
+    .link {
+      width: 100%;
+      display: flex;
+      gap: 5px;
+
+      * {
+        flex: 1;
+        margin-top: 5px !important;
+      }
+
+      #open a {
+        margin: 0 !important;
+        display: block;
+        height: 100%;
+        width: 100%;
+        text-decoration: none;
+
+      }
+    }
+
+    @media screen and (max-width: 920px) {
+      .container {
+        flex-direction: column-reverse;
+        gap: 30px;
+      }
+
+      .preview {
+        min-height: fit-content;
+
+        .preview-content {
+          position: relative;
+        }
+      }
+
+
+
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form class="form" onsubmit="link(event)">
+      <div class="link">
+        <button id="copyLink" type="button" onclick="copy()" disabled>Copy Link</button> 
+        <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
+      </div>
+      <button type="submit">Generate</button>
+      <textarea name="" id="description" placeholder=" "></textarea>
+      <label for="description" class="label2">Description</label>
+      <input type="text" id="title" placeholder=" ">
+      <label for="title" class="label1">Title</label>
+    </form>
+    <div class="preview">
+      <div class="preview-content">
+        <p>Preview :</p>
+        <iframe class="result"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var title = document.getElementById('title');
+    var description = document.getElementById('description');
+    var result = document.querySelector('.result');
+    var openlink = document.getElementById('openlink');
+    var openBtn = document.getElementById('open');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        console.log('load')
+
+        console.log(title.value + description.value)
+        var resultSrc = '/Mail.html?title=' + encrypt(title.value) + '&description=' + encrypt(description.value)
+
+
+        if (title.value && description.value) {
+          result.src = resultSrc
+          openLink.href = resultSrc
+          openLink.style.color = 'black'
+          openBtn.removeAttribute('disabled')
+          copyLink.removeAttribute('disabled')
+        }
+      }, 1000);
+
+      responsive();
+
+      window.addEventListener('resize', responsive);
+    });
+
+    description.addEventListener('input', () => {
+      description.style.height = 'auto';
+      description.style.height = description.scrollHeight + 'px';
+    })
+
+    function link(event) {
+      event.preventDefault();
+
+      var copyLink = document.getElementById('copyLink');
+      var label = document.querySelectorAll('label');
+
+      var resultSrc = '/Mail.html?title=' + encrypt(title.value) + '&description=' + encrypt(description.value)
+
+      if (title.value && description.value) {
+        result.src = resultSrc
+        openLink.href = resultSrc
+        openLink.style.color = 'black'
+        openBtn.removeAttribute('disabled')
+        copyLink.removeAttribute('disabled')
+      } else {
+        if (!title.value) {
+          label[0].style.color = 'red'
+        }
+        if (!description.value) {
+          label[1].style.color = 'red'
+        }
+
+        
+        setTimeout(() => {
+          label.forEach((i, index) => {
+            i.removeAttribute('style')
+          });
+        }, 3000);
+      }
+    }
+
+    function responsive() {
+      var form = document.querySelector('.form');
+      
+      form.style.width = window.innerWidth * 0.5 + 'px'
+    }
+
+    function encrypt(text) {
+      console.log(text)
+      var unicode = Array.from(text).map(ord => ord.codePointAt(0));
+      console.log(unicode)
+      return unicode.map(hex => hex.toString(16)).join('g')
+    }
+
+    function copy() {
+      console.log(title.value);
+      console.log(description.value);
+      var result = document.querySelector('.result').src;
+
+      navigator.clipboard.writeText(result)
+    }
+  </script>
+</body>
+</html>

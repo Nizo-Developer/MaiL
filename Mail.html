@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday</title>
+  <style>
+    body {
+      background-color: #fff;
+      margin: 0;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-inline: 50px;
+      gap: 20px;
+
+      * {
+        text-align: center;
+      }
+    }
+
+    #title {
+      font-weight: bold;
+      font-size: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="title"></div>
+    <div id="description"></div>
+  </div>
+
+  <script>
+    const url = window.location.search
+    var param = url.replace(/&amp;/g, '&').replace(/%20/g, ' ').slice(1).split('&')
+    var params = {}
+
+    var title = document.getElementById('title');
+    var description = document.getElementById('description');
+    
+    param.map(i => {
+      x = i.split('=')
+      params[x[0]] = x[1]
+    })
+
+    console.log(url)
+    console.log(param)
+    console.log(params)
+    title.innerHTML = decrypt(params['title'])
+    description.innerHTML = decrypt(params['description'])
+
+    function decrypt(text) {
+      var ununicode = text.split('g').map(uni => String.fromCodePoint(parseInt(uni, 16)));
+
+      return ununicode.join('');
+    }
+  </script>
+</body>
+</html>
