@@ -36,24 +36,38 @@
     <div id="description"></div>
   </div>
 
-  <script>
+  <script type="module">
+    import { readData } from './module.js'
+
     const url = window.location.search
     var param = url.replace(/&amp;/g, '&').replace(/%20/g, ' ').slice(1).split('&')
     var params = {}
-
+    
     var title = document.getElementById('title');
     var description = document.getElementById('description');
     
+    var x;
     param.map(i => {
       x = i.split('=')
       params[x[0]] = x[1]
     })
+    console.log(params);
+    (async () => {
+      try {
+        var data = await readData(params['id']);
 
-    console.log(url)
-    console.log(param)
-    console.log(params)
-    title.innerHTML = decrypt(params['title'])
-    description.innerHTML = decrypt(params['description'])
+        // console.log(jso)
+        // console.log(url)
+        // console.log(param)
+        // console.log(params)
+        title.innerHTML = decrypt(data['title'])
+        description.innerHTML = decrypt(data['description'])
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    })();
+    // throw 'a'
+
 
     function decrypt(text) {
       var ununicode = text.split('g').map(uni => String.fromCodePoint(parseInt(uni, 16)));
