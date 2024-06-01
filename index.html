@@ -235,7 +235,7 @@
   <div class="container">
     <form class="form">
       <div class="link">
-        <button id="copyLink" type="button" onclick="copy()" disabled>Copy Link</button> 
+        <button id="copyLink" type="button" disabled>Copy Link</button> 
         <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
       </div>
       <button type="submit">Generate</button>
@@ -258,6 +258,8 @@
     var title = document.getElementById('title');
     var description = document.getElementById('description');
     var result = document.querySelector('.result');
+    var copyLink = document.getElementById('copyLink');
+    var label = document.querySelectorAll('label');
     var openlink = document.getElementById('openlink');
     var openBtn = document.getElementById('open');
     const form = document.querySelector('.form');
@@ -294,6 +296,7 @@
 
       window.addEventListener('resize', responsive);
       form.addEventListener('submit', link);
+      copyLink.addEventListener('click', copy);
     });
 
     description.addEventListener('input', () => {
@@ -308,15 +311,14 @@
     async function link(event) {
       event.preventDefault();
 
-      var copyLink = document.getElementById('copyLink');
-      var label = document.querySelectorAll('label');
       try {
-        var message_id = await createData(encrypt(title.value), encrypt(description.value))
-        console.log(message_id)
-        // var resultSrc = 'Mail.html?title=' + encrypt(title.value) + '&description=' + encrypt(description.value)
-        var resultSrc = 'Mail.html?id=' + message_id;
-  
+        
         if (title.value && description.value) {
+          var message_id = await createData(encrypt(title.value), encrypt(description.value))
+          console.log(message_id)
+          // var resultSrc = 'Mail.html?title=' + encrypt(title.value) + '&description=' + encrypt(description.value)
+          var resultSrc = 'Mail.html?id=' + message_id;
+          
           result.src = resultSrc
           openLink.href = resultSrc
           openLink.style.color = 'black'
