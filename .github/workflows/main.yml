@@ -19,7 +19,4 @@ jobs:
       - name: Use Secret Variable
         env:
           API_TOKEN: ${{ secrets.API_TOKEN }}
-        run: |
-          echo "Using API Token: $API_TOKEN"
-          # Contoh penggunaan API Token dalam skrip
-          curl -X GET https://api.example.com/data -H "Authorization: Bearer $API_TOKEN"
+
