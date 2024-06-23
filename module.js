@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBxcNckeFWxPseIqHivdphy8I-J8vm-pcc",
+  apiKey: env.API_TOKEN,
   authDomain: "mail-ea223.firebaseapp.com",
   databaseURL: "https://mail-ea223-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "mail-ea223",

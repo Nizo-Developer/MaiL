@@ -72,6 +72,7 @@
       }
 
       label {
+        width: fit-content;
         margin-top: 8px;
         font-size: 18px;
         color: white;
@@ -80,6 +81,7 @@
         font-weight: bold;
         transition: all 0.3s ease;
         margin-bottom: -45px;
+        pointer-events: none;
       }
 
       input, textarea {  
@@ -263,6 +265,7 @@
     var openlink = document.getElementById('openlink');
     var openBtn = document.getElementById('open');
     const form = document.querySelector('.form');
+    var focused;
     
     document.addEventListener('DOMContentLoaded', () => {
 
@@ -297,6 +300,7 @@
       window.addEventListener('resize', responsive);
       form.addEventListener('submit', link);
       copyLink.addEventListener('click', copy);
+      document.addEventListener('selectionchange', selectionFormating);
     });
 
     description.addEventListener('input', () => {
@@ -314,11 +318,12 @@
       try {
         
         if (title.value && description.value) {
-          var message_id = await createData(encrypt(title.value), encrypt(description.value))
+          console.log(formating(title.value))
+          var message_id = await createData(encrypt(formating(title.value)), encrypt(formating(description.value)))
           console.log(message_id)
           // var resultSrc = 'Mail.html?title=' + encrypt(title.value) + '&description=' + encrypt(description.value)
           var resultSrc = 'Mail.html?id=' + message_id;
-          
+
           result.src = resultSrc
           openLink.href = resultSrc
           openLink.style.color = 'black'
@@ -350,11 +355,80 @@
       form.style.width = window.innerWidth * 0.5 + 'px'
     }
 
+    function selectionFormating() {
+      var selected = window.getSelection();
+      var selectionText = selected.toString();
+      var enableFormating = true;
+
+      var keyBtn = ['b', 'i', 's', 'p']
+      var keyIndi = ['*', '_', '-', '```']
+
+      console.log(selectionText)
+
+      title.addEventListener('click', () => {
+        focused = 1
+      });
+      description.addEventListener('click', () => {
+        focused = 2
+      });
+      var tag = focused == 1 ? title : description
+      var indexStart = tag.selectionStart
+      
+      if (selectionText && enableFormating) {
+        console.log('hi')
+        enableFormating = false
+
+        document.addEventListener('keydown', fm)
+
+        function fm(event)  {
+          console.log(event.key)
+          console.log(selectionText)
+          var indi = event.key in keyBtn ? keyIndi[keyBtn.indexOf(event.key)] : ''
+
+          console.log(event.ctrlKey, event.key in keyBtn)
+          console.log(focused)
+          console.log(event.ctrlKey && event.key in keyBtn && focused)
+
+          if (event.ctrlKey && event.key in keyBtn && focused) {
+            
+            console.log(indexStart)
+            console.log(tag)
+            console.log(tag.value)
+            var spesificRegex = new RegExp(`^.{${indexStart}}(.{${selectionText.length}})`, 'g')
+            console.log(tag.value.match(spesificRegex))
+            console.log(spesificRegex)
+            console.log(selectionText)
+
+            
+
+            tag.value = tag.value.replace(spesificRegex, `${indi}${tag.value.match(spesificRegex)}${indi}`)
+            
+          }
+          
+          if (indi) {
+            document.removeEventListener('keydown', fm)      
+          }
+        }
+      }
+    }
+
     function encrypt(text) {
       console.log(text)
       var unicode = Array.from(text).map(ord => ord.codePointAt(0));
       console.log(unicode)
       return unicode.map(hex => hex.toString(16)).join('g')
+    }
+
+    function formating(text) {
+      var character = ['_', '\\*', '-', '```']
+      var tag = ['i', 'b', 's', 'pre']
+      
+      character.map((i, index) => {
+        var formatingRegex = new RegExp(`${i}(.*?)${i}`, 'g')
+        text = text.replace(formatingRegex, `<${tag[index]}>$1</${tag[index]}>`)
+      })
+
+      return text
     }
 
     function copy() {
@@ -364,6 +438,8 @@
 
       navigator.clipboard.writeText(result)
     }
+
+    // window.formating = formating;
   </script>
 </body>
 </html>
