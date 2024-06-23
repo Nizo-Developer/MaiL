@@ -6,33 +6,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@400..800&family=Varela+Round&display=swap" rel="stylesheet">
-  <!-- <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBxcNckeFWxPseIqHivdphy8I-J8vm-pcc",
-      authDomain: "mail-ea223.firebaseapp.com",
-      databaseURL: "https://mail-ea223-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "mail-ea223",
-      storageBucket: "mail-ea223.appspot.com",
-      messagingSenderId: "720207516334",
-      appId: "1:720207516334:web:34db9e14d94b57939c533f",
-      measurementId: "G-E7G44M30EV"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const messageRef = ref(database, 'message');
-      console.log(messageRef);
-    });
-
-  </script> -->
   <title>Mail</title>
   <style>
     * {
@@ -46,6 +19,10 @@
       align-items: center;
       justify-content: center;
       background-color: #16161b;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     .container {
@@ -210,7 +187,10 @@
         height: 100%;
         width: 100%;
         text-decoration: none;
+      }
 
+      #edit {
+        display: none;
       }
     }
 
@@ -240,7 +220,10 @@
         <button id="copyLink" type="button" disabled>Copy Link</button> 
         <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
       </div>
-      <button type="submit">Generate</button>
+      <div class="link">
+        <button id="generate" type="submit">Generate</button>
+        <button id="edit" type="submit">Edit</button>
+      </div>
       <textarea name="" id="description" placeholder=" "></textarea>
       <label for="description" class="label2">Description</label>
       <input type="text" id="title" placeholder=" ">
@@ -255,7 +238,7 @@
   </div>
 
   <script type="module">
-    import { createData } from './module.js'
+    import { createData, updateData } from './module.js'
 
     var title = document.getElementById('title');
     var description = document.getElementById('description');
@@ -315,13 +298,28 @@
     async function link(event) {
       event.preventDefault();
 
+      const id = event.submitter.id[0] == 'g' ? 0 : (event.submitter.id[0] == 'e' ? 1 : null) 
+
       try {
         
         if (title.value && description.value) {
           console.log(formating(title.value))
-          var message_id = await createData(encrypt(formating(title.value)), encrypt(formating(description.value)))
-          console.log(message_id)
-          // var resultSrc = 'Mail.html?title=' + encrypt(title.value) + '&description=' + encrypt(description.value)
+          var message_id = await (id == 0 ?
+            createData(
+              encrypt(formating(title.value)), 
+              encrypt(formating(description.value))
+            ) : ( id == 1 ?
+            updateData(
+              localStorage.getItem('id'),
+              encrypt(formating(title.value)), 
+              encrypt(formating(description.value))
+            ) : null
+          ))
+
+          if (localStorage.getItem('id')) {
+            edit.style.display = 'block'
+          }
+
           var resultSrc = 'Mail.html?id=' + message_id;
 
           result.src = resultSrc

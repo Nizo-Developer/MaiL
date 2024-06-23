@@ -32,6 +32,7 @@ export function createData(title, description) {
         })
         .then(() => {
           console.log('Data saved successfully.');
+          localStorage.setItem('id', message_id)
           resolve(message_id);
         })
         .catch((error) => {
@@ -44,6 +45,26 @@ export function createData(title, description) {
         reject(error);
       });
   });
+}
+
+export function updateData(id, title, description) {
+  return new Promise((resolve, reject) => {
+    const message_id = id;
+    const newMessageRef = ref(database, 'message/' + message_id);
+
+    set(newMessageRef, {
+      title: title,
+      description: description
+    })
+    .then(() => {
+      console.log('Data saved successfully.');
+      resolve(message_id);
+    })
+    .catch((error) => {
+      console.error('Error saving data: ', error);
+      reject(error);
+    });
+  })
 }
 
 export function readData(id) {
