@@ -336,8 +336,6 @@
     var openlink = document.getElementById('openlink');
     var openBtn = document.getElementById('open');
     const form = document.querySelector('.form');
-    const signin = document.getElementById('signin');
-    const signup = document.getElementById('signup');
     const accWrap = document.querySelector('.acc-container');
     var focused;
     
@@ -348,8 +346,9 @@
 
         async function loadAcc() {
           const account = await readingToken();
+          console.log(account)
 
-          if (account) {
+          if (account && localStorage.getItem('token')) {
             const username = document.createElement('div')
             username.setAttribute('class', 'account');
             username.setAttribute('id', 'user');
@@ -366,16 +365,16 @@
 
             accWrap.appendChild(user)
 
-
+            console.log('s')
 
           } else {
             const info = document.createElement('div');
             info.setAttribute('class', 'account');
             info.setAttribute('id', 'info');
-            info.innerHtml = 'Use Account to get more feature!';
+            info.innerHTML = 'Use Account to get more feature!';
 
             const btnWrap = document.createElement('div');
-            btn.setAttribute('acc-button');
+            btnWrap.setAttribute('class', 'acc-button');
 
             const signin = document.createElement('button');
             signin.setAttribute('class', 'account');
@@ -399,6 +398,9 @@
       }, 1000);
 
       responsive();
+
+      const signin = document.getElementById('signin');
+      const signup = document.getElementById('signup');
 
       window.addEventListener('resize', responsive);
       form.addEventListener('submit', link);

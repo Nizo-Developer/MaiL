@@ -112,6 +112,8 @@ export function readingToken() {
         .catch((error) => {
           console.error('Error:', error);
         });
+    } else {
+      resolve(false);
     }
   });
 }
