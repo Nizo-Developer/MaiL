@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+import { getDatabase, ref, set, get, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: window.API_TOKEN,
@@ -84,4 +84,147 @@ export function readData(id) {
         reject(error);
       });
   });
+}
+
+// ACCOUNT
+export function readingToken() {
+  return new Promise((resolve, reject) => {
+    const token = localStorage.getItem('token') ?? null;
+
+    if (token) {
+      const account = ref(database, `account/`);
+      const getToken = query(account, orderByChild('token'), equalTo(token))
+
+      get(getToken)
+        .then((userToken) => {
+          if (userToken.exists()) {
+            const data = Object.entries(userToken.val())[0]
+            const user = {
+              userId: data[0],
+              username: data[1].username
+            }
+
+            resolve(user)
+          } else {
+            reject();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  });
+}
+
+export function login(username, password) {
+  return new Promise((resolve, reject) => {
+    const account = ref(database, `account/`)
+    const name = query(account, orderByChild('username'), equalTo(username))
+
+    get(name)
+      .then((user) => {
+        if (user.exists()) {
+          const data = Object.entries(user.val())
+          const userData = data[0][1]
+          console.log(data[0][1])
+
+          async function sign() {
+            const hashPassword = await hashing(password);
+
+            if (hashPassword == userData.password) {
+              const token = userData.token ?? ranhex(32);
+              const userToken = ref(database, `account/${token}`)
+
+              update(userToken, {
+                token: token
+              })
+                .then(() => {
+                  localStorage.setItem('token', token);
+      
+                  setTimeout(() => {
+                    window.location.href = '/'
+                  }, 1000);
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                });
+            }
+          }
+          sign()
+        } else {
+          console.log('Data not found');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  })
+}
+
+export function signup(username, password) {
+  return new Promise((resolve, reject) => {
+    const account = ref(database, `account/${username}`)
+
+    get(account)
+      .then((user) => {
+        if (user.exists()) {
+
+          reject('This username Already exists')
+
+        } else {
+
+          async function sign() {
+            const hashPassword = await hashing(password)
+            const id = ranhex(16)
+            const token = ranhex(32)
+
+            const newuser = ref(database, `account/` + id)
+              
+            set(newuser, {
+              username: username,
+              password: hashPassword,
+              token: token
+            })
+              .then(() => {
+                console.log('Data added successfully');
+  
+                localStorage.setItem('token', token);
+  
+                setTimeout(() => {
+                  window.location.href = '/'
+                }, 1000);
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+          }
+
+          sign()
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  })
+}
+
+function randint(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function ranhex(size) {
+  return Array.from({ length: size }, (_, index) => randint(0,15).toString(16)).join('')
+}
+
+async function hashing(password) {
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
 }

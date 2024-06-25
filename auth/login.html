@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    * {
+      font-family: monospace;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #16161b;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: fit-content;
+      padding: 50px;
+
+      p {
+        color: white;
+        font-weight: bold;
+        font-size: 30px;
+        margin-top: 0;
+      }
+
+      #login {
+        display: flex;
+        flex-direction: column-reverse;
+        transition: all 0.3s ease;
+
+        p {
+          color: rgb(192, 192, 192);
+          font-size: 12px;
+          display: flex;
+            flex-direction: column;
+
+          a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.5s ease;
+
+            &:hover {
+              color: lightblue;
+            }
+          }
+        }
+
+        button {
+          width: fit-content;
+          align-self: flex-end;
+          color: white;
+          border: 2px solid white;
+          background-color: transparent;
+          padding: 3px 25px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        button:hover {
+          background-color: white;
+          color: #16161b;
+        }
+
+        input {
+          padding-bottom: 10px;
+          height: auto;
+          background-color: transparent;
+          border: none;
+          border-bottom: 2px solid white;
+          color: white;
+          transition: all 0.3s ease;
+          margin: 20px 0;
+          
+          &:focus {
+            outline: none;
+          }
+
+        }
+
+        input:-internal-autofill-selected {
+          appearance: none !important;
+          background-image: none !important;
+          background-color: transparent !important;
+          color: white !important;
+        }
+        
+        label {
+          width: fit-content;
+          margin-top: 8px;
+          font-size: 18px;
+          color: white;
+          background-color: transparent;
+          border: none;
+          font-weight: bold;
+          transition: all 0.3s ease;
+          margin-bottom: -45px;
+          pointer-events: none;
+        }
+      }
+
+      #username {
+        &:focus ~ .label1 {
+          letter-spacing: 5px;
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+        &:placeholder-shown ~ .label1 {
+          color: white;
+        }
+        &:not(:placeholder-shown) ~ .label1 {
+          color: lime;
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+      }
+      #password {
+        &:focus ~ .label2 {
+          letter-spacing: 5px;
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+        &:placeholder-shown ~ .label2 {
+          color: white;
+        }
+        &:not(:placeholder-shown) ~ .label2 {
+          color: lime;  
+          margin-bottom: 0;
+          font-size: 30px;
+        }
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Login</p>
+    <form id="login">
+      <p class="signup">Don't have an account? <a href="signup.html">Sign Up now</a></p>
+      <button type="submit">Login</button>
+      <input type="password" id="password" placeholder=" ">
+      <label for="password" class="label2">Password</label>
+      <input type="text" id="username" placeholder=" ">
+      <label for="username" class="label1">Username</label>
+    </form>
+  </div>
+
+  <script type="module">
+    import { login } from '/module.js'
+
+    const form = document.getElementById('login');
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+
+      responsive();
+
+      window.addEventListener('resize', responsive);
+      form.addEventListener('submit', loginacc)
+    });
+
+    async function loginacc(event) {
+      event.preventDefault()
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+
+        const enter = await login(
+          username,
+          password
+        )
+
+        console.log(enter)
+
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+
+    function responsive() {
+      var form = document.querySelector('form');
+      var scale = window.innerWidth * 0.4;
+
+      form.style.width = (scale > 280 ? scale : 280) + 'px'
+    }
+  </script>
+</body>
+</html>
