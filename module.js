@@ -15,46 +15,82 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-export function createData(title, description) {
+async function setupConfig(path = './') {
+  let config = {};
+  const messageId = getMessageId();
+  const response = await fetch(`${path}setting.json`);
+  config = await response.json();
+  console.log(config)
+
+  if (messageId) {
+    const message = await readData(messageId);
+    config = message.config
+  } else {
+    const auth = await checkUser();
+    console.log(auth)
+    
+    if (auth) {
+      config = auth.config
+    }
+  }
+  console.log(config)
+  // const refUserSetting = ref(database)
+
+  return config
+}
+
+export function createData(title, description, ) {
   return new Promise((resolve, reject) => {
-    const dataRef = ref(database, 'message/');
+    
+    async function getUser() {
+      const config = await setupConfig();
+      const user = await checkUser();
+      const refMessage = ref(database, 'message/');
+      const snapshot1 = await get(refMessage);
+      const message_id = Object.keys(snapshot1.val()).length + 1;
+      const refSet = ref(database, `message/${message_id}`);
+      console.log(config)
+      const now = timeNow();
 
-    get(dataRef)
-      .then((snapshot) => {
-        const message_id = snapshot.val().length;
-        // console.log(count) 
-        // const message_id = count + 1; 
-        const newMessageRef = ref(database, 'message/' + message_id);
 
-        set(newMessageRef, {
-          title: title,
-          description: description
-        })
-        .then(() => {
-          console.log('Data saved successfully.');
-          localStorage.setItem('id', message_id)
-          resolve(message_id);
-        })
-        .catch((error) => {
-          console.error('Error saving data: ', error);
-          reject(error);
-        });
+      set(refSet, {
+        title: title,
+        description: description,
+        author: user ? localStorage.getItem('userId') : 'anonymous',
+        config: config,
+        timestamp: {
+          create_at: now,
+          update_at: ""
+        }
+      },)
+      .then(() => {
+        console.log('Data saved successfully.');
+        localStorage.setItem('id', message_id)
+        resolve(message_id);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error('Error saving data: ', error);
         reject(error);
       });
+    }
+
+    getUser()
   });
 }
 
 export function updateData(id, title, description) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async(resolve, reject) => {
+    const config = await setupConfig();
     const message_id = id;
     const newMessageRef = ref(database, 'message/' + message_id);
+    const now = timeNow();
 
-    set(newMessageRef, {
+
+    update(newMessageRef, {
       title: title,
-      description: description
+      description: description,
+      config: config,
+      'timestamp/update_at': now
     })
     .then(() => {
       console.log('Data saved successfully.');
@@ -99,12 +135,13 @@ export function readingToken() {
         .then((userToken) => {
           if (userToken.exists()) {
             const data = Object.entries(userToken.val())[0]
-            const user = {
+            const userData = {
               userId: data[0],
               username: data[1].username
             }
 
-            resolve(user)
+            localStorage.setItem('userId', data[0])
+            resolve(userData)
           } else {
             reject();
           }
@@ -135,7 +172,7 @@ export function login(username, password) {
 
             if (hashPassword == userData.password) {
               const token = userData.token ?? ranhex(32);
-              const userToken = ref(database, `account/${token}`)
+              const userToken = ref(database, `account/${localStorage.getItem('userId')}`)
 
               update(userToken, {
                 token: token
@@ -176,16 +213,24 @@ export function signup(username, password) {
         } else {
 
           async function sign() {
-            const hashPassword = await hashing(password)
-            const id = ranhex(16)
+            const config = await setupConfig('../');
+            const hashPassword = await hashing(password);
+            const id = ranhex(16);
             const token = ranhex(32)
+            const now = timeNow();
 
             const newuser = ref(database, `account/` + id)
+            console.log(config)
               
             set(newuser, {
               username: username,
               password: hashPassword,
-              token: token
+              token: token,
+              config: config,
+              timestamp: {
+                create_at: now,
+                update_at: ""
+              }
             })
               .then(() => {
                 console.log('Data added successfully');
@@ -210,6 +255,60 @@ export function signup(username, password) {
   })
 }
 
+export function wordCount(words) {
+  // console.log(String(words))
+  // console.log(String(words).split(' '))
+  return (
+    String(words).split(' ').filter(Boolean).length +
+    String(words).split('\n').filter(Boolean).length - 1
+  ) ;
+}
+
+export function getAuthor(userId) {
+  return new Promise(async(resolve, reject) => {
+    const refUser = ref(database, `account/${userId}`);
+  
+    const getUser = await get(refUser)
+    const user = getUser.val()
+    resolve(user ? `@${user.username}` : `deleted user ( @${userId} )`)
+  });
+}
+
+function checkUser() {
+  return new Promise(async (resolve, reject) => {
+    
+    try {
+      const user = ref(database, `account/${localStorage.getItem('userId')}`)
+    
+      if (localStorage.getItem('token') && localStorage.getItem('userId')) {
+    
+      get(user)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const dataUser = snapshot.val();
+            console.log(dataUser.username)
+    
+            if (localStorage.getItem('token') == dataUser.token) {
+              console.log('knp')
+              resolve({
+                username: dataUser.username,
+                config: dataUser.config
+              })
+            } 
+          } 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      } else {
+        resolve(false)
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  });
+}
+
 function randint(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -229,4 +328,30 @@ async function hashing(password) {
   } catch (error) {
     console.error('Error:', error.message);
   }
+}
+
+function getMessageId() {
+  const url = window.location
+  
+  if (String(url.path).includes('Mail.html')) {
+    const query = url.search
+    var param = query.replace(/&amp;/g, '&').replace(/%20/g, ' ').slice(1).split('&')
+  
+    var x;
+    var id;
+    param.map(i => {
+      x = i.split('=')
+      if (x[0] == 'id') {
+        id = x[1]
+        return id
+      }
+    })
+  } else {
+    return localStorage.getItem('id')
+  }
+}
+
+function timeNow() {
+  const now = new Date();
+  return now.toLocaleString();
 }

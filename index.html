@@ -11,20 +11,37 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
+      max-height: 100vh;
+      width: 100vw;
       display: flex;
       align-items: center;
-      justify-content: center;
       background-color: #16161b;
+      overflow-x: hidden;
+      align-items: flex-start;
     }
 
     button {
       cursor: pointer;
     }
 
-    .container {
+    .container-wrapper {
       display: flex;
+      position: relative;
+      left: 0;
+      transition: all 1s ease;
+    }
+
+    .container {
+      min-width: 100vw;
+      display: flex;
+      justify-content: center;
       gap: 40px;
+      transition: all 1s ease;
+    }
+
+    #formContainer {
+      position: relative;
+      right: 0;
     }
 
     .form {
@@ -56,6 +73,11 @@
         transition: all 0.3s ease;
         margin-bottom: -45px;
         pointer-events: none;
+
+        .counter {
+          color: white;
+          font-size: 12px;
+        }
       }
 
       input, textarea {  
@@ -90,6 +112,10 @@
           letter-spacing: 5px;
           margin-bottom: 0;
           font-size: 30px;
+
+          .counter {
+            letter-spacing: 1px;
+          }
         }
         &:placeholder-shown ~ .label1 {
           color: white;
@@ -105,6 +131,10 @@
           letter-spacing: 5px;
           margin-bottom: 0;
           font-size: 30px;
+
+          .counter {
+            letter-spacing: 1px;
+          }
         }
         &:placeholder-shown ~ .label2 {
           color: white;
@@ -155,7 +185,7 @@
     .preview-content {
       height: fit-content;
       width: fit-content;
-      position: fixed;
+      position: sticky;
       top: 20%;
     }
 
@@ -195,21 +225,54 @@
       display: flex;
       position: fixed;
       height: 80px;
-      width: 100%;
+      width: 100vw;
       top: 0;
       align-items: center;
-      justify-content: flex-end;
-      gap: 20px;
-      margin-right: 40px;
+      justify-content: space-between;
+      z-index: 2;
+      pointer-events: none;
+
+      * {
+        pointer-events: all;
+      }
+
+      & > :first-child {
+        margin-left: 20px;
+      }
+
+      & > :last-child {
+        margin-right: 20px;
+      }
+
+      .section-right {
+        display: flex;
+        gap: 20px;
+        transition: all 0.3s ease;
+      }
+
+      #svgSetting {
+        height: 30px;
+        position: relative;
+        left: 0;
+        cursor: pointer;
+        transition: all 0.5s ease-in-out;
+
+        &:hover {
+          transform: rotateZ(405deg);
+        }
+      }
 
       #info {
         border: none;
         font-size: 14px;
         padding: 0;
+        color: white;
+        font-weight: bold;
       }
 
       .acc-button {
         display: flex;
+        justify-content: flex-end;
         gap: 20px;
       }
 
@@ -220,7 +283,7 @@
         border: 2px solid white;
         background-color: transparent;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 16px;
         transition: all 0.3s ease;
         cursor: pointer;
         user-select: none;
@@ -251,12 +314,62 @@
       #userWrap {
         display: flex;
         align-items: center;
+        margin-right: 20px;
 
         &:hover > #logout {
           width: 20px;
         }
       }
 
+    }
+
+    .list {
+      height: 100vh;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding-inline: 10px;
+      font-size: 25px;
+      position: fixed;
+      right: 0;
+      z-index: 1;
+      left: unset;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        padding-inline: 20px;
+      }
+
+      /* &:active {
+
+        & ~ .container {
+          position: relative;
+          transition: all 0.3s ease;
+          animation: alist-container 1s ease;
+        }
+      } */
+    }
+
+    #list {
+      align-items: center;
+      left: 0;
+    }
+
+    .message-list {
+      background-color: #fff;
+      height: 500px;
+      width: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      .item-list {
+        width: 90%;
+        color: #16161b;
+      }
     }
 
     @media screen and (max-width: 920px) {
@@ -266,12 +379,15 @@
       }
       .acc-container {
         display: flex;
-        flex-direction: column;
         height: fit-content;
         position: relative;
-        gap: 10px;
         align-items: flex-end;
         margin-top: 20px;
+        
+        .section-right {
+          gap: 10px;
+          flex-direction: column;
+        }
 
         .acc-button {
           gap: 10px;
@@ -280,6 +396,7 @@
       .container {
         flex-direction: column-reverse;
         gap: 30px;
+        align-items: center;
       }
 
       .preview {
@@ -290,46 +407,72 @@
         }
       }
 
+      #userWrap:hover #logout {
+        width: 0;
+      }
       #userWrap:active #logout {
         width: 20px;
       }
-
+    
     }
   </style>
 </head>
 <body>
   <div class="acc-container">
-    <div id="userWrap">
+    <img src="/asset/setting.svg" alt="ini setting" id="svgSetting">
+  </div>
+  <div class="list" id="listBtn">
+    <div class="list-btn">
+      <
     </div>
   </div>
-  <div class="container">
-    <form class="form">
-      <div class="link">
-        <button id="copyLink" type="button" disabled>Copy Link</button> 
-        <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
+  <div class="container-wrapper">
+    <div class="container" id="formContainer">
+      <form class="form">
+        <div class="link">
+          <button id="copyLink" type="button" disabled>Copy Link</button>
+          <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
+        </div>
+        <div class="link">
+          <button id="generate" type="submit">Generate</button>
+          <button id="edit" type="submit">Edit</button>
+        </div>
+        <textarea name="" id="description" placeholder=" "></textarea>
+        <label for="description" class="label2">Description
+          <span id="cdescription" class="counter"></span>
+        </label>
+        <input type="text" id="title" placeholder=" ">
+        <label for="title" class="label1">Title
+          <span id="ctitle" class="counter"></span>
+        </label>
+      </form>
+      <div class="preview">
+        <div class="preview-content">
+          <p>Preview :</p>
+          <iframe class="result"></iframe>
+        </div>
       </div>
-      <div class="link">
-        <button id="generate" type="submit">Generate</button>
-        <button id="edit" type="submit">Edit</button>
-      </div>
-      <textarea name="" id="description" placeholder=" "></textarea>
-      <label for="description" class="label2">Description</label>
-      <input type="text" id="title" placeholder=" ">
-      <label for="title" class="label1">Title</label>
-    </form>
-    <div class="preview">
-      <div class="preview-content">
-        <p>Preview :</p>
-        <iframe class="result"></iframe>
+    </div>
+    <div class="container" id="list">
+      <div class="message-list" id="message-list">
+        <div class="item-list">
+          Ini nanti bakal jd list dari message yg kalian buat dr sebelum"nya, nantikan update selanjutnya programmer, ini lg cape jd adios ' -'✌️
+          <br><br>
+          note & saran: signup > login, biar kesimpen, untuk author kedepannya bisa di hide, mungkin juga jangka panjang rencana ada fitur friend
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- #ab223b -->
+
   <script type="module">
-    import { createData, updateData, readingToken } from './module.js'
+    import { createData, updateData, readingToken, wordCount } from './module.js'
 
     var title = document.getElementById('title');
     var description = document.getElementById('description');
+    var count1 = document.getElementById('ctitle');
+    var count2 = document.getElementById('cdescription');
     var result = document.querySelector('.result');
     var copyLink = document.getElementById('copyLink');
     var label = document.querySelectorAll('label');
@@ -337,100 +480,197 @@
     var openBtn = document.getElementById('open');
     const form = document.querySelector('.form');
     const accWrap = document.querySelector('.acc-container');
+    const conWrap = document.querySelector('.container-wrapper');
+    const list = document.getElementById('listBtn');
+    const container = document.getElementById('formContainer');
+    const messageList = document.getElementById('list');
     var focused;
     
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('load')
+      localStorage.removeItem('id')
 
-      setTimeout(() => {
-        console.log('load')
+      async function loadAcc() {
+        const account = await readingToken();
+        console.log(account)
 
-        async function loadAcc() {
-          const account = await readingToken();
-          console.log(account)
+        if (account && localStorage.getItem('token')) {
+          const username = document.createElement('div')
+          username.setAttribute('class', 'account');
+          username.setAttribute('id', 'user');
+          username.innerHTML = account.username;
 
-          if (account && localStorage.getItem('token')) {
-            const username = document.createElement('div')
-            username.setAttribute('class', 'account');
-            username.setAttribute('id', 'user');
-            username.innerHTML = account.username;
+          const logout = document.createElement('div');
+          logout.setAttribute('id', 'logout');
+          logout.innerHTML = 'x';
 
-            const logout = document.createElement('div');
-            logout.setAttribute('id', 'logout');
-            logout.innerHTML = 'x';
+          const user = document.createElement('div');
+          user.setAttribute('id', 'userWrap');
+          user.appendChild(username);
+          user.appendChild(logout);
 
-            const user = document.createElement('div');
-            user.setAttribute('id', 'userWrap');
-            user.appendChild(username);
-            user.appendChild(logout);
+          accWrap.appendChild(user)
 
-            accWrap.appendChild(user)
+          console.log('s')
 
-            console.log('s')
+        } else {
+          const info = document.createElement('div');
+          info.setAttribute('id', 'info');
+          info.innerHTML = 'Use Account to get more feature!';
 
-          } else {
-            const info = document.createElement('div');
-            info.setAttribute('class', 'account');
-            info.setAttribute('id', 'info');
-            info.innerHTML = 'Use Account to get more feature!';
+          const secRight = document.createElement('div');
+          secRight.setAttribute('class', 'section-right');
 
-            const btnWrap = document.createElement('div');
-            btnWrap.setAttribute('class', 'acc-button');
+          const btnWrap = document.createElement('div');
+          btnWrap.setAttribute('class', 'acc-button');
 
-            const signin = document.createElement('button');
-            signin.setAttribute('class', 'account');
-            signin.setAttribute('id', 'signin');
-            signin.innerHTML = 'Login';
+          const signin = document.createElement('button');
+          signin.setAttribute('class', 'account');
+          signin.setAttribute('id', 'signin');
+          signin.innerHTML = 'Login';
 
-            const signup = document.createElement('button');
-            signup.setAttribute('class', 'account');
-            signup.setAttribute('id', 'signup');
-            signup.innerHTML = 'Sign Up';
+          const signup = document.createElement('button');
+          signup.setAttribute('class', 'account');
+          signup.setAttribute('id', 'signup');
+          signup.innerHTML = 'Sign Up';
 
-            btnWrap.appendChild(signin);
-            btnWrap.appendChild(signup);
+          btnWrap.appendChild(signin);
+          btnWrap.appendChild(signup);
 
-            accWrap.appendChild(info);
-            accWrap.appendChild(btnWrap);
-          }
+          secRight.appendChild(info);
+          secRight.appendChild(btnWrap);
+
+          accWrap.appendChild(secRight);
         }
 
-        loadAcc()
-      }, 1000);
+        const signin = document.getElementById('signin');
+        const signup = document.getElementById('signup');
+        const out = document.getElementById('logout');
 
+        window.addEventListener('resize', responsive);
+        form.addEventListener('submit', link);
+        copyLink.addEventListener('click', copy);
+        document.addEventListener('selectionchange', selectionFormating);
+        // togglePage()
+        list.addEventListener('click', togglePage)
+        if (signin && signup) {
+          signin.addEventListener('click', () => {
+            acc(1)
+          });
+          signup.addEventListener('click', () => {
+            acc(2)
+          });
+        } else {
+          out.addEventListener('click', logout)
+        }
+      }
+
+      loadAcc()
       responsive();
 
-      const signin = document.getElementById('signin');
-      const signup = document.getElementById('signup');
-
-      window.addEventListener('resize', responsive);
-      form.addEventListener('submit', link);
-      copyLink.addEventListener('click', copy);
-      document.addEventListener('selectionchange', selectionFormating);
-      if (signin && signup) {
-        signin.addEventListener('click', () => {
-          acc(1)
-        });
-        signup.addEventListener('click', () => {
-          acc(2)
-        });
-      }
     });
+
+    title.addEventListener('input', () => {
+      if (wordCount(title.value) > 0) {
+        count1.innerHTML = `( ${wordCount(title.value)} )`
+      } else {
+        count1.innerHTML = '';
+      }
+    })
 
     description.addEventListener('input', () => {
       description.style.height = 'auto';
-      description.style.height = description.scrollHeight + 'px';
+      if (wordCount(description.value) > 0) {
+        description.style.height = description.scrollHeight + 'px';
+        count2.innerHTML = `( ${wordCount(description.value)} )`
+      } else {
+        description.removeAttribute('style');
+        count2.innerHTML = '';
+      }
+      form.style.marginTop = description.scrollHeight > window.innerHeight / 2 ? description.scrollHeight  + 'px' : 0;
     });
 
     window.onerror = function(message, source, lineno, colno, error) {
       localStorage.setItem('error', [message,source,lineno,colno,error]); 
     };
 
+    function togglePage() {
+      const page = list.children[0].innerText == '<' ? true : false;
+      if (page) {
+        list.style.paddingInline = 0;
+        container.style.position = 'relative'
+        container.style.gap = '10px'
+        container.style.right = '-100px'
+        list.style.transition = 'all 1s ease';
+
+        setTimeout(() => {
+          list.style.right = '100vw'
+          container.style.gap = '40px'
+          container.style.right = '100vw'
+          conWrap.style.left = '-100vw'
+          setTimeout(() => {
+            list.style.right = '100vw'
+            container.style.gap = '40px'
+            setTimeout(() => {
+              list.children[0].innerText = '>'
+              list.style.left = '-40px'
+              setTimeout(() => {
+                list.style.left = 0;
+                list.style.right = 'unset';
+                list.style.removeProperty('padding-inline');
+                setTimeout(() => {
+                  list.style.removeProperty('transition');
+                }, 500);
+              }, 300);
+            }, 800);
+          }, 500);
+        }, 500);
+      } else {
+        list.style.paddingInline = 0;
+        messageList.style.position = 'relative'
+        messageList.style.left = '-100px'
+        list.style.transition = 'all 1s ease';
+
+        setTimeout(() => {
+          list.style.left = '100vw'
+          container.style.right = '0';
+          conWrap.style.left = '0'
+          messageList.style.removeProperty('left')
+          setTimeout(() => {
+            list.style.left = '100vw'
+            setTimeout(() => {
+              list.children[0].innerText = '<'
+              list.style.right = '-40px'
+              setTimeout(() => {
+                list.style.right = 0;
+                list.style.left = 'unset';
+                list.style.removeProperty('padding-inline');
+                setTimeout(() => {
+                  list.style.removeProperty('transition');
+                }, 500);
+              }, 300);
+            }, 800);
+          }, 500);
+        }, 500);
+      }
+    }
+
     function acc(id) {
       if (id == 1) {
-        window.location.href = '/auth/login.html'
+        window.location.href = './auth/login.html'
       } else if (id == 2) {
-        window.location.href = '/auth/signup.html'
+        window.location.href = './auth/signup.html'
       }
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      console.log('a')
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 300);
     }
 
     async function link(event) {
@@ -453,6 +693,7 @@
               encrypt(formating(description.value))
             ) : null
           ))
+          console.log(message_id)
 
           if (localStorage.getItem('id')) {
             edit.style.display = 'block'
@@ -486,9 +727,11 @@
     }
 
     function responsive() {
-      var form = document.querySelector('.form');
+      const form = document.querySelector('.form');
+      const list = document.getElementById('message-list')
       
       form.style.width = window.innerWidth * 0.5 + 'px'
+      list.style.width = window.innerWidth * 0.5 + 'px'
     }
 
     function selectionFormating() {
@@ -499,7 +742,7 @@
       var keyBtn = ['b', 'i', 's', 'p']
       var keyIndi = ['*', '_', '-', '```']
 
-      console.log(selectionText)
+      // console.log(selectionText)
 
       title.addEventListener('click', () => {
         focused = 1

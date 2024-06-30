@@ -32,23 +32,34 @@
         font-size: 35px;
       }
     }
+
+    #author {
+      font-weight: bold;
+      font-size: 12px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      margin: 0 0 10px 15px;
+    }
   </style>
 </head>
 <body>
+  <div id="author"></div>
   <div class="container">
     <div id="title"></div>
     <div id="description"></div>
   </div>
 
   <script type="module">
-    import { readData } from './module.js'
+    import { readData, getAuthor } from './module.js'
 
     const url = window.location.search
     var param = url.replace(/&amp;/g, '&').replace(/%20/g, ' ').slice(1).split('&')
     var params = {}
     
-    var title = document.getElementById('title');
-    var description = document.getElementById('description');
+    const title = document.getElementById('title');
+    const description = document.getElementById('description');
+    const author = document.getElementById('author');
     
     var x;
     param.map(i => {
@@ -58,20 +69,21 @@
     console.log(params);
     (async () => {
       try {
-        var data = await readData(params['id']);
-
-        // console.log(jso)
-        // console.log(url)
-        // console.log(param)
-        // console.log(params)
+        const data = await readData(params['id']);
+        console.log(data)
+        const config = data.config
+        console.log(config.display_author)
+        
         title.innerHTML = decrypt(data['title'])
         description.innerHTML = decrypt(data['description'])
+        const displayName = await getAuthor(data.author);
+        if (config.display_author) {
+          author.innerHTML = 'Author: ' + (data.author != 'anonymous' ? displayName : 'anonymous');
+        }
       } catch (error) {
         console.error('Error:', error.message);
       }
     })();
-    // throw 'a'
-
 
     function decrypt(text) {
       var ununicode = text.split('g').map(uni => String.fromCodePoint(parseInt(uni, 16)));
