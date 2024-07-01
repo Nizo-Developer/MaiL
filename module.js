@@ -238,9 +238,9 @@ export function signup(username, password) {
   
                 localStorage.setItem('token', token);
   
-                // setTimeout(() => {
-                //   window.location.href = '../'
-                // }, 1000);
+                setTimeout(() => {
+                  window.location.href = '../'
+                }, 1000);
               })
               .catch((error) => {
                 console.error('Error:', error);
