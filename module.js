@@ -181,7 +181,7 @@ export function login(username, password) {
                   localStorage.setItem('token', token);
       
                   setTimeout(() => {
-                    window.location.href = '/'
+                    window.location.href = '../'
                   }, 1000);
                 })
                 .catch((error) => {
@@ -238,7 +238,7 @@ export function signup(username, password) {
                 localStorage.setItem('token', token);
   
                 setTimeout(() => {
-                  window.location.href = '/'
+                  window.location.href = '../'
                 }, 1000);
               })
               .catch((error) => {
