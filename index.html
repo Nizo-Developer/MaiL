@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mail</title>
+  <link rel="icon" href="./asset/favico_mf9_icon.ico" type="image/x-icon">
+  <link rel="icon" href="./asset/favico.png" type="image/png">
+  <link rel="icon" href="./asset/favico.svg" type="image/svg+xml">
   <style>
     * {
       font-family: monospace;
@@ -32,7 +35,7 @@
     }
 
     .container {
-      min-width: 100vw;
+      width: 100vw;
       display: flex;
       justify-content: center;
       gap: 40px;
@@ -355,6 +358,7 @@
     #list {
       align-items: center;
       left: 0;
+      display: none;
     }
 
     .message-list {
@@ -604,6 +608,8 @@
         list.style.transition = 'all 1s ease';
 
         setTimeout(() => {
+          messageList.style.display = 'flex';
+          responsive()
           list.style.right = '100vw'
           container.style.gap = '40px'
           container.style.right = '100vw'
@@ -639,6 +645,7 @@
           setTimeout(() => {
             list.style.left = '100vw'
             setTimeout(() => {
+              messageList.style.display = 'none';
               list.children[0].innerText = '<'
               list.style.right = '-40px'
               setTimeout(() => {
@@ -722,16 +729,20 @@
           }, 3000);
         }
       } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Error:', error);
       }
     }
 
     function responsive() {
       const form = document.querySelector('.form');
-      const list = document.getElementById('message-list')
+      const list = document.getElementById('message-list');
+      const listWidth = messageList.getBoundingClientRect().width;
+      const responsive = window.innerWidth * 0.5
+
+      console.log(listWidth)
       
-      form.style.width = window.innerWidth * 0.5 + 'px'
-      list.style.width = window.innerWidth * 0.5 + 'px'
+      form.style.width = responsive + 'px';
+      list.style.width = listWidth - 100 > responsive ? responsive + 'px' : listWidth - 100 + 'px';
     }
 
     function selectionFormating() {

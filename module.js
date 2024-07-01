@@ -202,9 +202,10 @@ export function login(username, password) {
 
 export function signup(username, password) {
   return new Promise((resolve, reject) => {
-    const account = ref(database, `account/${username}`)
+    const account = ref(database, `account/`)
+    const getUser = query(account, orderByChild('username'), equalTo(username))
 
-    get(account)
+    get(getUser)
       .then((user) => {
         if (user.exists()) {
 
@@ -216,7 +217,7 @@ export function signup(username, password) {
             const config = await setupConfig('../');
             const hashPassword = await hashing(password);
             const id = ranhex(16);
-            const token = ranhex(32)
+            const token = ranhex(32);
             const now = timeNow();
 
             const newuser = ref(database, `account/` + id)
@@ -237,9 +238,9 @@ export function signup(username, password) {
   
                 localStorage.setItem('token', token);
   
-                setTimeout(() => {
-                  window.location.href = '../'
-                }, 1000);
+                // setTimeout(() => {
+                //   window.location.href = '../'
+                // }, 1000);
               })
               .catch((error) => {
                 console.error('Error:', error);
