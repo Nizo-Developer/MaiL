@@ -275,6 +275,18 @@ export function getAuthor(userId) {
   });
 }
 
+export function getAllMessage() {
+  return new Promise(async(resolve, reject) => {
+    const refMessage = ref(database, 'message/')
+    const userMessage = query(refMessage, orderByChild('author'), equalTo(localStorage.getItem('userId')));
+
+    const getUserMessage = await get(userMessage);
+    const data = getAllMessage.val()
+
+    console.log(data)
+  });
+}
+
 function checkUser() {
   return new Promise(async (resolve, reject) => {
     

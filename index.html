@@ -362,17 +362,19 @@
     }
 
     .message-list {
-      background-color: #fff;
       height: 500px;
       width: 800px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
+      padding-inline: 30px;
+      border-top: 1px solid white;
+      border-bottom: 1px solid white;
 
       .item-list {
         width: 90%;
-        color: #16161b;
+        color: white;
       }
     }
 
@@ -460,9 +462,7 @@
     <div class="container" id="list">
       <div class="message-list" id="message-list">
         <div class="item-list">
-          Ini nanti bakal jd list dari message yg kalian buat dr sebelum"nya, nantikan update selanjutnya programmer, ini lg cape jd adios ' -'✌️
-          <br><br>
-          note & saran: signup > login, biar kesimpen, untuk author kedepannya bisa di hide, mungkin juga jangka panjang rencana ada fitur friend
+          
         </div>
       </div>
     </div>
@@ -488,6 +488,7 @@
     const list = document.getElementById('listBtn');
     const container = document.getElementById('formContainer');
     const messageList = document.getElementById('list');
+    const listContent = document.querySelector('.item-list');
     var focused;
     
     document.addEventListener('DOMContentLoaded', () => {
@@ -569,7 +570,8 @@
         }
       }
 
-      loadAcc()
+      loadAcc();
+      loadList();
       responsive();
 
     });
@@ -597,6 +599,17 @@
     window.onerror = function(message, source, lineno, colno, error) {
       localStorage.setItem('error', [message,source,lineno,colno,error]); 
     };
+
+    async function loadList() {
+      try {
+
+      } catch (error) {
+        
+      }
+      const data = await getAllMessage();
+
+
+    }
 
     function togglePage() {
       const page = list.children[0].innerText == '<' ? true : false;
