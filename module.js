@@ -110,7 +110,24 @@ export function readData(id) {
     get(dataRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
-          resolve(snapshot.val());
+          const data = snapshot.val();
+          console.log(data)
+
+          if (data.author != 'anonymous') {
+            (async () => {
+              try {
+                const auth = await readingToken();
+
+                if (auth) {
+                  resolve(data);
+                } else {
+                  reject('Not allow access')
+                }
+              } catch (error) {
+                console.error('Error:', error.message);
+              }
+            })();
+          }
         } else {
           throw new Error("Data not found");
         }
@@ -281,13 +298,44 @@ export function getAllMessage() {
     const userMessage = query(refMessage, orderByChild('author'), equalTo(localStorage.getItem('userId')));
 
     const getUserMessage = await get(userMessage);
-    const data = getAllMessage.val()
+    const data = getUserMessage.val();
+    if (data) {
+      const keys = Object.keys(data);
+      const dataLength = keys.length;
+  
+      const list = {}
+      keys.forEach((key, index) => {
+        const value = data[key]
+        list[key] = {
+          title: decrypt(value.title),
+          description: decrypt(value.description),
+          config: value.config
+        }
+      });
+    }
+    const response = {
+      sumData: data ? dataLength : 0,
+      message: list ?? null
+    }
 
-    console.log(data)
+    resolve(response)
   });
 }
 
-function checkUser() {
+export function encrypt(text) {
+  console.log(text)
+  var unicode = Array.from(text).map(ord => ord.codePointAt(0));
+  console.log(unicode)
+  return unicode.map(hex => hex.toString(16)).join('g')
+}
+
+export function decrypt(text) {
+  var ununicode = text.split('g').map(uni => String.fromCodePoint(parseInt(uni, 16)));
+
+  return ununicode.join('');
+}
+
+export function checkUser() {
   return new Promise(async (resolve, reject) => {
     
     try {
@@ -302,7 +350,6 @@ function checkUser() {
             console.log(dataUser.username)
     
             if (localStorage.getItem('token') == dataUser.token) {
-              console.log('knp')
               resolve({
                 username: dataUser.username,
                 config: dataUser.config

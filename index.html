@@ -12,6 +12,17 @@
       font-family: monospace;
     }
 
+    *::-webkit-scrollbar {
+      width: 5px;
+    }
+    *::-webkit-scrollbar-track {
+      background-color: #353541;
+    }
+    *::-webkit-scrollbar-thumb {
+      background-color: #0c0c0f;
+      border-radius: 1000px 0 0 1000px;
+    }
+
     body {
       margin: 0;
       max-height: 100vh;
@@ -362,19 +373,96 @@
     }
 
     .message-list {
-      height: 500px;
+      height: 80vh;
       width: 800px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       text-align: center;
       padding-inline: 30px;
       border-top: 1px solid white;
       border-bottom: 1px solid white;
+      overflow: hidden;
+      overflow-y: auto;
 
       .item-list {
         width: 90%;
         color: white;
+        display: flex;
+        flex-direction: column;
+        margin-block: 20px;
+        gap: 20px;
+        
+        .message {
+          border-right: 2px solid white;
+          border-left: 2px solid white;
+          display: flex;
+          justify-content: space-between;
+          padding: 5px 20px;
+          gap: 20px;
+
+          .message-right {
+            width: fit-content;
+            display: flex;
+            gap: 20px;
+            overflow: hidden;
+
+            .message-wrapper {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              text-align: start;
+              overflow: hidden;
+  
+              .msg {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                flex-shrink: 1;
+                min-width: 0;
+              }
+  
+              .listTitle {
+                font-size: 20px;
+              }
+  
+              .listDescription {
+                font-size: 12px;
+              }
+            }
+          }
+          
+
+          .button-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            .btn {
+              border: 1px solid white;
+              background-color: transparent;
+              color: white;
+              transition: all 0.3s ease;
+
+              &:hover {
+                background-color: white;
+              }
+
+              a {
+                display: block;
+                height: 100%;
+                width: 100%;
+                text-decoration: none;
+                color: white;
+
+                &:hover {
+                  color: #16161b;
+                }
+              }
+            }
+          }
+        }
       }
     }
 
@@ -388,7 +476,7 @@
         height: fit-content;
         position: relative;
         align-items: flex-end;
-        margin-top: 20px;
+        margin-block: 20px;
         
         .section-right {
           gap: 10px;
@@ -418,6 +506,10 @@
       }
       #userWrap:active #logout {
         width: 20px;
+      }
+
+      #list {
+        justify-content: flex-end;
       }
     
     }
@@ -462,7 +554,6 @@
     <div class="container" id="list">
       <div class="message-list" id="message-list">
         <div class="item-list">
-          
         </div>
       </div>
     </div>
@@ -471,7 +562,7 @@
   <!-- #ab223b -->
 
   <script type="module">
-    import { createData, updateData, readingToken, wordCount } from './module.js'
+    import { encrypt, decrypt, createData, updateData, readingToken, wordCount, getAllMessage, readData, checkUser } from './module.js'
 
     var title = document.getElementById('title');
     var description = document.getElementById('description');
@@ -488,6 +579,7 @@
     const list = document.getElementById('listBtn');
     const container = document.getElementById('formContainer');
     const messageList = document.getElementById('list');
+    const listParent = document.querySelector('.message-list');
     const listContent = document.querySelector('.item-list');
     var focused;
     
@@ -576,15 +668,18 @@
 
     });
 
-    title.addEventListener('input', () => {
+    title.addEventListener('input', titleAct)
+    description.addEventListener('input', descriptionAct);
+
+    function titleAct() {
       if (wordCount(title.value) > 0) {
         count1.innerHTML = `( ${wordCount(title.value)} )`
       } else {
         count1.innerHTML = '';
       }
-    })
+    }
 
-    description.addEventListener('input', () => {
+    function descriptionAct() {
       description.style.height = 'auto';
       if (wordCount(description.value) > 0) {
         description.style.height = description.scrollHeight + 'px';
@@ -594,19 +689,96 @@
         count2.innerHTML = '';
       }
       form.style.marginTop = description.scrollHeight > window.innerHeight / 2 ? description.scrollHeight  + 'px' : 0;
-    });
+    }
 
     window.onerror = function(message, source, lineno, colno, error) {
       localStorage.setItem('error', [message,source,lineno,colno,error]); 
     };
 
     async function loadList() {
-      // try {
+      try {
+        console.log('yes')
+        const data = await getAllMessage();
+        console.log(data)
 
-      // } catch (error) {
-        
-      // }
-      // const data = await getAllMessage();
+        if (data.sumData > 0) {
+
+          const message = document.createElement('div');
+          const btn = document.createElement('button');
+          btn.setAttribute('class', 'btn');
+          const anchor = document.createElement('a');
+          const parag = document.createElement('p');
+  
+          const fragment = document.createDocumentFragment();
+          
+          Object.keys(data.message).forEach((key, index) => {
+            const dataMessage = data.message[key]
+            console.log(dataMessage)
+  
+            const content = message.cloneNode(true);
+            content.setAttribute('class', 'message');
+            fragment.appendChild(content);
+  
+            const right = message.cloneNode(true);
+            right.setAttribute('class', 'message-right');
+            content.appendChild(right);
+  
+            const id = parag.cloneNode(true);
+            id.innerHTML = `#${key}`
+            right.appendChild(id)
+  
+            const messageContent = message.cloneNode(true);
+            messageContent.setAttribute('class', 'message-wrapper');
+            right.appendChild(messageContent);
+            
+            const title = message.cloneNode(true);
+            title.setAttribute('class', 'msg listTitle');
+            title.innerHTML = dataMessage.title;
+            messageContent.appendChild(title);
+  
+            const description = message.cloneNode(true);
+            description.setAttribute('class', 'msg listDescription');
+            description.innerHTML = dataMessage.description
+            messageContent.appendChild(description);
+  
+            const buttonContent = message.cloneNode(true);
+            buttonContent.setAttribute('class', 'button-wrapper');
+            content.appendChild(buttonContent);
+  
+            const edit = btn.cloneNode(true);
+            edit.setAttribute('id', 'edit-list');
+  
+            const aedit = anchor.cloneNode(true);
+            aedit.setAttribute('onclick', `editMessage(${key})`)
+            aedit.innerHTML = 'edit';
+            
+            const view = btn.cloneNode(true);
+            view.setAttribute('id', 'view-list');
+            
+            const aview = anchor.cloneNode(true);
+            aview.href = `./Mail.html?id=${key}`
+            aview.innerHTML = 'view';
+            
+            edit.appendChild(aedit)
+            view.appendChild(aview)
+            buttonContent.appendChild(edit);
+            buttonContent.appendChild(view);
+          })
+  
+          listContent.appendChild(fragment);
+        } else {
+          listParent.style.alignItems = 'center';
+          const validation = await checkUser();
+
+          if (validation) {
+            listContent.innerHTML = "You haven't create a single message yet";
+          } else {
+            listContent.innerHTML = "You should Login to use this Feature"
+          }
+        }
+      } catch (error) {
+          listContent.innerHTML = error.message
+      }
     }
 
     function togglePage() {
@@ -691,6 +863,22 @@
       }, 300);
     }
 
+    async function editMessage(messageId) {
+      localStorage.setItem('id', messageId)
+      const id = localStorage.getItem('id');
+      const data = await readData(id);
+
+      title.value = decrypt(data.title);
+      description.value = decrypt(data.description);
+      if (localStorage.getItem('id')) {
+        edit.style.display = 'block'
+      }
+
+      titleAct();
+      descriptionAct();
+      togglePage();
+    }
+
     async function link(event) {
       event.preventDefault();
 
@@ -712,18 +900,19 @@
             ) : null
           ))
           console.log(message_id)
-
+          
           if (localStorage.getItem('id')) {
             edit.style.display = 'block'
           }
-
+          
           var resultSrc = 'Mail.html?id=' + message_id;
-
+          
           result.src = resultSrc
           openLink.href = resultSrc
           openLink.style.color = 'black'
           openBtn.removeAttribute('disabled')
           copyLink.removeAttribute('disabled')
+          await loadList();
         } else {
           if (!title.value) {
             label[0].style.color = 'red'
@@ -813,13 +1002,6 @@
       }
     }
 
-    function encrypt(text) {
-      console.log(text)
-      var unicode = Array.from(text).map(ord => ord.codePointAt(0));
-      console.log(unicode)
-      return unicode.map(hex => hex.toString(16)).join('g')
-    }
-
     function formating(text) {
       var character = ['_', '\\*', '-', '```']
       var tag = ['i', 'b', 's', 'pre']
@@ -842,7 +1024,7 @@
 
 
 
-    // window.formating = formating;
+    window.editMessage = editMessage;
   </script>
 </body>
 </html>
