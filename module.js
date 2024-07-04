@@ -47,7 +47,8 @@ export function createData(title, description, ) {
       const user = await checkUser();
       const refMessage = ref(database, 'message/');
       const snapshot1 = await get(refMessage);
-      const message_id = Object.keys(snapshot1.val()).length + 1;
+      const keys = Object.keys(snapshot1.val());
+      const message_id = parseInt(keys[keys.length-1]) + 1;
       const refSet = ref(database, `message/${message_id}`);
       console.log(config)
       const now = timeNow();

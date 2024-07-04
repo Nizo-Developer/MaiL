@@ -711,8 +711,6 @@
       allElements.forEach(element => {
         const style = window.getComputedStyle(element);
         const currentFontSize = parseFloat(style.fontSize);
-        console.log(element)
-        console.log(currentFontSize)
         const newFontSize = currentFontSize * 0.5;
         element.style.fontSize = newFontSize + 'px';
       });
