@@ -127,6 +127,8 @@ export function readData(id) {
                 console.error('Error:', error.message);
               }
             })();
+          } else {
+            resolve(data);
           }
         } else {
           throw new Error("Data not found");
