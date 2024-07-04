@@ -299,11 +299,12 @@ export function getAllMessage() {
 
     const getUserMessage = await get(userMessage);
     const data = getUserMessage.val();
+    const keys = data ? Object.keys(data) : '';
+    const dataLength = data ? keys.length : 0;
+    const list = {}
+    
     if (data) {
-      const keys = Object.keys(data);
-      const dataLength = keys.length;
   
-      const list = {}
       keys.forEach((key, index) => {
         const value = data[key]
         list[key] = {
@@ -314,7 +315,7 @@ export function getAllMessage() {
       });
     }
     const response = {
-      sumData: data ? dataLength : 0,
+      sumData: dataLength,
       message: list ?? null
     }
 

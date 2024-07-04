@@ -18,18 +18,25 @@
     }
 
     .container {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding-inline: 50px;
-      gap: 20px;
+      
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: fit-content;
+        margin-block: 35px;
 
-      * {
-        text-align: center;
-        overflow-wrap: break-word;
-        word-break: break-all;
+        * {
+          text-align: center;
+          overflow-wrap: break-word;
+          word-break: break-word;
+        }
       }
     }
 
@@ -40,6 +47,10 @@
       b {
         font-size: 35px;
       }
+    }
+
+    #description {
+      font-size: 16px;
     }
 
     #author {
@@ -55,8 +66,10 @@
 <body>
   <div id="author"></div>
   <div class="container">
-    <div id="title"></div>
-    <div id="description"></div>
+    <div class="content">
+      <div id="title"></div>
+      <div id="description"></div>
+    </div>
   </div>
 
   <script type="module">

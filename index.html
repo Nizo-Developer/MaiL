@@ -210,6 +210,9 @@
       height: 300px;
       width: 300px;
       padding: 3px;
+      min-width: 250px;
+      min-height: 250px;
+      transition: all 0.3s ease;
     }
 
     .link {
@@ -368,8 +371,10 @@
 
     #list {
       align-items: center;
-      left: 0;
+      left: 100vw;
       display: none;
+      height: 100vh;
+      position: fixed;
     }
 
     .message-list {
@@ -384,6 +389,7 @@
       border-bottom: 1px solid white;
       overflow: hidden;
       overflow-y: auto;
+      transition: all 0.3s ease;
 
       .item-list {
         width: 90%;
@@ -402,7 +408,6 @@
           gap: 20px;
 
           .message-right {
-            width: fit-content;
             display: flex;
             gap: 20px;
             overflow: hidden;
@@ -447,6 +452,10 @@
 
               &:hover {
                 background-color: white;
+
+                * {
+                    color: #16161b;
+                }
               }
 
               a {
@@ -455,10 +464,7 @@
                 width: 100%;
                 text-decoration: none;
                 color: white;
-
-                &:hover {
-                  color: #16161b;
-                }
+                transition: all 0.3s ease;
               }
             }
           }
@@ -489,14 +495,21 @@
       }
       .container {
         flex-direction: column-reverse;
-        gap: 30px;
+        gap: 20px;
         align-items: center;
+      }
+
+      .form {
+        margin-top: 0 !important;
       }
 
       .preview {
         min-height: fit-content;
+        display: flex;
+        justify-content: center;
 
         .preview-content {
+          top: 0;
           position: relative;
         }
       }
@@ -510,6 +523,26 @@
 
       #list {
         justify-content: flex-end;
+      }
+
+      .message-list {
+        padding-inline: 0;
+      }
+
+      .message {
+        flex-direction: column;
+      }
+
+      .message-right {
+        width: 100%;
+
+        p {
+          display: none;
+        }
+      }
+
+      .button-wrapper {
+        justify-content: flex-end !important;
       }
     
     }
@@ -553,8 +586,7 @@
     </div>
     <div class="container" id="list">
       <div class="message-list" id="message-list">
-        <div class="item-list">
-        </div>
+        <div class="item-list"></div>
       </div>
     </div>
   </div>
@@ -568,7 +600,7 @@
     var description = document.getElementById('description');
     var count1 = document.getElementById('ctitle');
     var count2 = document.getElementById('cdescription');
-    var result = document.querySelector('.result');
+    const result = document.querySelector('.result');
     var copyLink = document.getElementById('copyLink');
     var label = document.querySelectorAll('label');
     var openlink = document.getElementById('openlink');
@@ -660,16 +692,31 @@
         } else {
           out.addEventListener('click', logout)
         }
+        result.addEventListener('load', previewScale);
       }
 
-      loadAcc();
-      loadList();
+      (async () => {
+        await loadAcc();
+        await loadList();
+      })()
       responsive();
-
     });
 
     title.addEventListener('input', titleAct)
     description.addEventListener('input', descriptionAct);
+
+    function previewScale() {
+      const iframeDocument = result.contentDocument || result.contentWindow.document;
+      const allElements = iframeDocument.querySelectorAll('*');
+      allElements.forEach(element => {
+        const style = window.getComputedStyle(element);
+        const currentFontSize = parseFloat(style.fontSize);
+        console.log(element)
+        console.log(currentFontSize)
+        const newFontSize = currentFontSize * 0.5;
+        element.style.fontSize = newFontSize + 'px';
+      });
+    }
 
     function titleAct() {
       if (wordCount(title.value) > 0) {
@@ -688,7 +735,7 @@
         description.removeAttribute('style');
         count2.innerHTML = '';
       }
-      form.style.marginTop = description.scrollHeight > window.innerHeight / 2 ? description.scrollHeight  + 'px' : 0;
+      form.style.marginTop = description.scrollHeight < window.innerHeight / 4 ? description.scrollHeight  + 'px' : window.innerHeight / 4 + 'px';
     }
 
     window.onerror = function(message, source, lineno, colno, error) {
@@ -696,10 +743,11 @@
     };
 
     async function loadList() {
+      listContent.innerHTML = ''
+
       try {
         console.log('yes')
         const data = await getAllMessage();
-        console.log(data)
 
         if (data.sumData > 0) {
 
@@ -713,7 +761,6 @@
           
           Object.keys(data.message).forEach((key, index) => {
             const dataMessage = data.message[key]
-            console.log(dataMessage)
   
             const content = message.cloneNode(true);
             content.setAttribute('class', 'message');
@@ -797,12 +844,14 @@
           container.style.gap = '40px'
           container.style.right = '100vw'
           conWrap.style.left = '-100vw'
+          messageList.style.left = 0
           setTimeout(() => {
             list.style.right = '100vw'
             container.style.gap = '40px'
             setTimeout(() => {
               list.children[0].innerText = '>'
               list.style.left = '-40px'
+              messageList.style.position = 'fixed'
               setTimeout(() => {
                 list.style.left = 0;
                 list.style.right = 'unset';
@@ -816,7 +865,6 @@
         }, 500);
       } else {
         list.style.paddingInline = 0;
-        messageList.style.position = 'relative'
         messageList.style.left = '-100px'
         list.style.transition = 'all 1s ease';
 
@@ -824,7 +872,7 @@
           list.style.left = '100vw'
           container.style.right = '0';
           conWrap.style.left = '0'
-          messageList.style.removeProperty('left')
+          messageList.style.left = '100vw' 
           setTimeout(() => {
             list.style.left = '100vw'
             setTimeout(() => {
@@ -873,6 +921,14 @@
       if (localStorage.getItem('id')) {
         edit.style.display = 'block'
       }
+
+      var resultSrc = 'Mail.html?id=' + messageId;
+          
+      result.src = resultSrc
+      openLink.href = resultSrc
+      openLink.style.color = 'black'
+      openBtn.removeAttribute('disabled')
+      copyLink.removeAttribute('disabled')
 
       titleAct();
       descriptionAct();
@@ -937,12 +993,17 @@
       const form = document.querySelector('.form');
       const list = document.getElementById('message-list');
       const listWidth = messageList.getBoundingClientRect().width;
+
+      const width = window.innerWidth;
+      const height = window.innerHeight;
       const responsive = window.innerWidth * 0.5
 
       console.log(listWidth)
       
       form.style.width = responsive + 'px';
-      list.style.width = listWidth - 100 > responsive ? responsive + 'px' : listWidth - 100 + 'px';
+      list.style.width = listWidth > 700 ? responsive + 'px' : listWidth * 0.9 + 'px';
+      result.style.height = height * 0.5 + 'px'
+      result.style.width = width * 0.5 + 'px'
     }
 
     function selectionFormating() {
@@ -1015,10 +1076,6 @@
     }
 
     function copy() {
-      console.log(title.value);
-      console.log(description.value);
-      var result = document.querySelector('.result').src;
-
       navigator.clipboard.writeText(result)
     }
 
