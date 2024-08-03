@@ -67,9 +67,28 @@
       justify-content: center;
       transition: all 0.3s ease;
       padding-block: 50px;
+      margin-top: 0 !important;
 
-      button {
-        margin-top: 20px;
+      div button {
+        background-color: transparent;
+        border: 1px solid white;
+        padding-block: 3px;
+        color: white;
+        transition: all 0.3s ease;
+
+        #openLink {
+          color: white;
+        }
+      }
+
+
+      div button:hover {
+        background-color: white;
+        color: #16161b;
+
+        #openLink {
+          color: #16161b;
+        }
       }
 
       input {
@@ -84,7 +103,7 @@
         background-color: transparent;
         border: none;
         font-weight: bold;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
         margin-bottom: -45px;
         pointer-events: none;
 
@@ -203,8 +222,25 @@
       top: 20%;
     }
 
-    .result {
+    .iframe {
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border: 1px solid white;
+    }
+
+    .inner-iframe {
+      display: flex;
+      height: 0;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: all 2s cubic-bezier(1, -0.5, 0.1, 1.5);;
+    }
+
+    .result {
+      border: none;
       color: white;
       word-wrap: break-word;
       height: 300px;
@@ -445,6 +481,7 @@
             gap: 10px;
 
             .btn {
+              padding: 3px 10px;
               border: 1px solid white;
               background-color: transparent;
               color: white;
@@ -497,10 +534,6 @@
         flex-direction: column-reverse;
         gap: 20px;
         align-items: center;
-      }
-
-      .form {
-        margin-top: 0 !important;
       }
 
       .preview {
@@ -580,7 +613,11 @@
       <div class="preview">
         <div class="preview-content">
           <p>Preview :</p>
-          <iframe class="result"></iframe>
+          <div class="iframe">
+            <div class="inner-iframe">
+              <iframe class="result"></iframe>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -600,6 +637,8 @@
     var description = document.getElementById('description');
     var count1 = document.getElementById('ctitle');
     var count2 = document.getElementById('cdescription');
+    const resultHead = document.querySelector('.iframe');
+    const resultAnimate = document.querySelector('.inner-iframe');
     const result = document.querySelector('.result');
     var copyLink = document.getElementById('copyLink');
     var label = document.querySelectorAll('label');
@@ -708,12 +747,24 @@
     function previewScale() {
       const iframeDocument = result.contentDocument || result.contentWindow.document;
       const allElements = iframeDocument.querySelectorAll('*');
+      const container = iframeDocument.querySelector('.container')
+      const style1 = window.getComputedStyle(container);
+      const newPadding = parseFloat(style1.paddingInline) * 0.5;
+      container.style.paddingInline = newPadding + 'px';
+      const content = iframeDocument.querySelector('.content')
+      const style2 = window.getComputedStyle(content);
+      const newMargin = parseFloat(style2.marginBlock) * 0.5;
+      content.style.marginBlock = newMargin + 'px';
       allElements.forEach(element => {
         const style = window.getComputedStyle(element);
         const currentFontSize = parseFloat(style.fontSize);
+        const currentGap = parseFloat(style.gap);
         const newFontSize = currentFontSize * 0.5;
+        const newGap = currentFontSize * 0.5;
         element.style.fontSize = newFontSize + 'px';
+        element.style.gap = newGap + 'px';
       });
+      resultAnimate.style.height = 100 + '%';
     }
 
     function titleAct() {
@@ -801,7 +852,8 @@
             view.setAttribute('id', 'view-list');
             
             const aview = anchor.cloneNode(true);
-            aview.href = `./Mail.html?id=${key}`
+            aview.href = `./Mail.html?id=${key}`;
+            aview.target = '_blank'
             aview.innerHTML = 'view';
             
             edit.appendChild(aedit)
@@ -924,7 +976,7 @@
           
       result.src = resultSrc
       openLink.href = resultSrc
-      openLink.style.color = 'black'
+      // openLink.style.color = 'black'
       openBtn.removeAttribute('disabled')
       copyLink.removeAttribute('disabled')
 
@@ -963,7 +1015,6 @@
           
           result.src = resultSrc
           openLink.href = resultSrc
-          openLink.style.color = 'black'
           openBtn.removeAttribute('disabled')
           copyLink.removeAttribute('disabled')
           await loadList();
@@ -1000,8 +1051,10 @@
       
       form.style.width = responsive + 'px';
       list.style.width = listWidth > 700 ? responsive + 'px' : listWidth * 0.9 + 'px';
-      result.style.height = height * 0.5 + 'px'
-      result.style.width = width * 0.5 + 'px'
+      resultHead.style.height = height * 0.5 + 'px';
+      resultHead.style.width = width * 0.5 + 'px';
+      result.style.height = height * 0.5 - 3 + 'px';
+      result.style.width = width * 0.5 - 3 + 'px';
     }
 
     function selectionFormating() {
