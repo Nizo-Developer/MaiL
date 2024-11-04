@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
+  <title>Login</title>
   <link rel="icon" href="../asset/favico_mf9_icon.ico" type="image/x-icon">
   <link rel="icon" href="../asset/favico.png" type="image/png">
   <link rel="icon" href="../asset/favico.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../src/css/particle.css">
   <style>
     * {
       font-family: monospace;
@@ -26,7 +27,6 @@
       flex-direction: column;
       align-items: center;
       height: fit-content;
-      padding: 50px;
 
       p {
         color: white;
@@ -35,7 +35,7 @@
         margin-top: 0;
       }
 
-      #signup {
+      #login {
         display: flex;
         flex-direction: column-reverse;
         transition: all 0.3s ease;
@@ -45,7 +45,7 @@
           font-size: 12px;
           display: flex;
           flex-direction: column;
-
+          
           a {
             color: white;
             text-decoration: none;
@@ -67,11 +67,42 @@
           background-color: transparent;
           padding: 3px 25px;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition-delay: 300ms;
           transition: all 0.3s ease;
         }
-        button:hover {
+        button::before {
+          content: '';
           background-color: white;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          display: block;
+          top: 0;
+          left: 0;
+          z-index: -1;
+
+        }
+        button::after {
+          content: '';
+          background-color: #16161b;
+          position: absolute;
+          height: 1000%;
+          width: 100%;
+          display: block;
+          z-index: -1;
+          transition: all 0.3s ease;
+          transform: rotateZ(-45deg);
+        }
+        button:hover {
           color: #16161b;
+        }
+        button:hover::after {
+          height: 0%;
         }
 
         input {
@@ -89,6 +120,13 @@
           }
         }
 
+        input:-internal-autofill-selected {
+          appearance: none !important;
+          background-image: none !important;
+          background-color: transparent !important;
+          color: white !important;
+        }
+        
         label {
           width: fit-content;
           margin-top: 8px;
@@ -100,13 +138,14 @@
           transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
           margin-bottom: -45px;
           pointer-events: none;
+          user-select: none;
         }
       }
 
       #username {
         &:focus ~ .label1 {
           letter-spacing: 5px;
-          margin-bottom: 0;
+          margin-bottom: -20px;
           font-size: 30px;
         }
         &:placeholder-shown ~ .label1 {
@@ -121,7 +160,7 @@
       #password {
         &:focus ~ .label2 {
           letter-spacing: 5px;
-          margin-bottom: 0;
+          margin-bottom: -20px;
           font-size: 30px;
         }
         &:placeholder-shown ~ .label2 {
@@ -133,83 +172,58 @@
           font-size: 30px;
         }
       }
-      #confirm {
-        &:focus ~ .label3 {
-          letter-spacing: 5px;
-          margin-bottom: 0;
-          font-size: 30px;
-        }
-        &:placeholder-shown ~ .label3 {
-          color: white;
-        }
-        &:not(:placeholder-shown) ~ .label3 {
-          color: lime;  
-          margin-bottom: 0;
-          font-size: 30px;
-        }
-      }
     }
-
   </style>
 </head>
 <body>
   <div class="container">
-    <p>Sign Up</p>
-    <form id="signup">
-      <p class="signup">Already have an account? <a href="login.html">Login now</a></p>
-      <button type="submit">Sign Up</button>
-      <input type="password" id="confirm" placeholder=" ">
-      <label for="confirm" class="label3">Confirm Password</label>
+    <p>Login</p>
+    <form id="login">
+      <p class="signup">Don't have an account? <a href="signup.html">Sign Up now</a></p>
+      <button type="submit">Login</button>
       <input type="password" id="password" placeholder=" ">
       <label for="password" class="label2">Password</label>
       <input type="text" id="username" placeholder=" ">
       <label for="username" class="label1">Username</label>
     </form>
   </div>
+  <div id="particle"></div>
 
   <script type="module">
-    import { signup } from '../module.js'
+    import { login } from '../src/js/module/module.mjs';
+    import { addCircle, particle } from '../src/js/lib/particle.js';
 
-    const form = document.getElementById('signup');
-    const lUsername = document.querySelector('.label1');
-    const lPassword = document.querySelector('.label2');
-    const lConfirm = document.querySelector('.label3');
+
+    const form = document.getElementById('login');
+    
 
     document.addEventListener('DOMContentLoaded', () => {
 
 
       responsive();
+      addCircle();
+      
 
       window.addEventListener('resize', responsive);
-      form.addEventListener('submit', signupacc)
+      form.addEventListener('submit', loginacc);
+      window.addEventListener('mousemove', particle);
     });
 
-    async function signupacc(event) {
+    async function loginacc(event) {
       event.preventDefault()
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const confirm = document.getElementById('confirm').value;
 
       try {
-        if (password == confirm && username && password && confirm) {
-          const register = await signup(
-            username,
-            password
-          )
-        } else {
-          lPassword.style.color = 'red';
-          lConfirm.style.color = 'red';
-          if (!(username && password && confirm)) {
-            lUsername.style.color = 'red';
-          }
 
-          setTimeout(() => {
-            lPassword.removeAttribute('style');
-            lConfirm.removeAttribute('style');
-            lUsername.removeAttribute('style');
-          }, 3000);
-        }
+        const enter = await login(
+          username,
+          password
+        )
+
+        console.log(enter)
+
       } catch (error) {
         console.error('Error:', error);
       }
@@ -219,8 +233,10 @@
       var form = document.querySelector('form');
       var scale = window.innerWidth * 0.4;
 
-      form.style.width = (scale > 280 ? scale : 280) + 'px'
+      form.style.width = (scale > 280 ? scale : 280) + 'px';
     }
+
+    
   </script>
 </body>
 </html>

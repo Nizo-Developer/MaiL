@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getDatabase, ref, set, get, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: window.API_TOKEN,
@@ -13,12 +13,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+export const database = getDatabase(app);
 
 async function setupConfig(path = './') {
   let config = {};
   const messageId = getMessageId();
-  const response = await fetch(`${path}setting.json`);
+  const response = await fetch(`${path}src/js/lib/setting.json`);
   config = await response.json();
   console.log(config)
 
@@ -149,7 +149,7 @@ export function readingToken() {
 
     if (token) {
       const account = ref(database, `account/`);
-      const getToken = query(account, orderByChild('token'), equalTo(token))
+      const getToken = query(account, orderByChild('token'), equalTo(token));
 
       get(getToken)
         .then((userToken) => {
@@ -241,7 +241,6 @@ export function signup(username, password) {
             const now = timeNow();
 
             const newuser = ref(database, `account/` + id)
-            console.log(config)
               
             set(newuser, {
               username: username,
@@ -257,7 +256,7 @@ export function signup(username, password) {
                 console.log('Data added successfully');
   
                 localStorage.setItem('token', token);
-  
+
                 setTimeout(() => {
                   window.location.href = '../'
                 }, 1000);
@@ -295,6 +294,17 @@ export function getAuthor(userId) {
   });
 }
 
+export function getIdByUsername(username) {
+  return new Promise(async(resolve, reject) => {
+    const refUser = ref(database, 'account/');
+    const queryUser = query(refUser, orderByChild('username'), equalTo(username));
+  
+    const getUser = (await get(queryUser)).val();
+    resolve(Object.keys(getUser)[0])
+  });
+}
+window.y = getIdByUsername
+
 export function getAllMessage() {
   return new Promise(async(resolve, reject) => {
     const refMessage = ref(database, 'message/')
@@ -304,7 +314,7 @@ export function getAllMessage() {
     const data = getUserMessage.val();
     const keys = data ? Object.keys(data) : '';
     const dataLength = data ? keys.length : 0;
-    const list = {}
+    let list = {}
     
     if (data) {
   
@@ -326,10 +336,10 @@ export function getAllMessage() {
   });
 }
 
+
 export function encrypt(text) {
   console.log(text)
   var unicode = Array.from(text).map(ord => ord.codePointAt(0));
-  console.log(unicode)
   return unicode.map(hex => hex.toString(16)).join('g')
 }
 
@@ -415,7 +425,9 @@ function getMessageId() {
   }
 }
 
-function timeNow() {
+export function timeNow() {
   const now = new Date();
   return now.toLocaleString();
 }
+
+// window.cek = readingToken()

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mail</title>
+  <link rel="stylesheet" href="../src/css/envelope.css">
+  <link rel="stylesheet" href="../src/css/nav.css">
+  <link rel="icon" href="../asset/favico_mf9_icon.ico" type="image/x-icon">
+  <link rel="icon" href="../asset/favico.png" type="image/png">
+  <link rel="icon" href="../asset/favico.svg" type="image/svg+xml">
+</head>
+<body>
+  <div class="acc-container">
+    <div class="menu-wrapper">
+      <div id="home">
+        <div class="home-icon">
+          <img src="../asset/home.svg" alt="home" height="15">
+          Home
+        </div>
+        <div class="line"></div>
+      </div>
+      <div id="friend">
+        <div class="friend-icon">
+          <img src="../asset/friend.svg" alt="friend" height="14">
+          Friend
+        </div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+  <section>
+    <div class="top">
+      <div class="title">Envelope <span id="count"></span></div>
+      <div class="search-wrap">
+        <input type="text" id="search">
+        <div id="search-btn">Search</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mail-wrapper">
+    <div class="no-envelope">
+      You haven't get a single mail :<
+    </div>
+  </div>
+
+  <script type="module" src="../src/js/lib/envelope.js"></script>
+</body>
+</html>

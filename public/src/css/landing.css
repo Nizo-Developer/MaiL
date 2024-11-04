@@ -1,0 +1,404 @@
+* {
+  font-family: monospace;
+}
+*::-webkit-scrollbar {
+  width: 5px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 1000px 0 0 1000px;
+  margin-block: 10px;
+  background-color: #353541;
+}
+.message-list::-webkit-scrollbar-track {
+  margin-block: 20px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #0c0c0f;
+  border-radius: 1000px 0 0 1000px;
+}
+body {
+  scroll-behavior: smooth;
+  margin: 0;
+  max-height: 100dvh;
+  width: 100dvw;
+  display: flex;
+  align-items: center;
+  background-color: #16161b;
+  overflow-x: hidden;
+  align-items: flex-start;
+}
+button {
+  cursor: pointer;
+}
+.container-wrapper {
+  display: flex;
+  position: relative;
+  left: 0;
+  transition: all 1s ease;
+}
+.container {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  transition: all 1s ease;
+}
+#formContainer {
+  position: relative;
+  right: 0;
+}
+.form {
+  min-width: 300px;
+  width: 400px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding-block: 50px;
+  margin-top: 0 !important;
+ /* input:focus ~ .label1 {
+    letter-spacing: 5px;
+  }
+  textarea:focus ~ .label2 {
+    letter-spacing: 5px;
+  }
+  input:placeholder-shown ~ .label1 {
+    color: white;
+  }
+  textarea:placeholder-shown ~ .label2 {
+    color: white;
+  }
+  input:not(:placeholder-shown) ~ .label1 {
+    color: lime;
+  }
+  textarea:not(:placeholder-shown) ~ .label2 {
+    color: lime;
+  }
+  */
+}
+.form div button {
+  background-color: transparent;
+  border: 1px solid white;
+  padding-block: 3px;
+  color: white;
+  transition: all 0.3s ease;
+}
+.form div button #openLink {
+  color: white;
+}
+.form div button:hover {
+  background-color: white;
+  color: #16161b;
+}
+.form div button:hover #openLink {
+  color: #16161b;
+}
+.form input {
+  padding-bottom: 10px;
+}
+.form label {
+  width: fit-content;
+  margin-top: 8px;
+  font-size: 18px;
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
+  margin-bottom: -45px;
+  pointer-events: none;
+  user-select: none;
+}
+.form label .counter {
+  color: white;
+  font-size: 12px;
+}
+.form input, .form textarea {
+  height: auto;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  color: white;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+.form input:focus, .form textarea:focus {
+  outline: none;
+}
+.form textarea {
+  width: 100%;
+  padding: 0;
+  padding-block: 3px;
+  resize: none;
+}
+.form .label2 {
+  margin-top: 30px;
+  margin-bottom: -55px;
+}
+.form #title:focus ~ .label1 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.form #title:focus ~ .label1 .counter {
+  letter-spacing: 1px;
+}
+.form #title:placeholder-shown ~ .label1 {
+  color: white;
+}
+.form #title:not(:placeholder-shown) ~ .label1 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.form #description:focus ~ .label2 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.form #description:focus ~ .label2 .counter {
+  letter-spacing: 1px;
+}
+.form #description:placeholder-shown ~ .label2 {
+  color: white;
+}
+.form #description:not(:placeholder-shown) ~ .label2 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.preview {
+  min-height: 100vh;
+  min-width: 300px;
+  position: relative;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  */
+}
+.preview p {
+  color: white;
+  font-size: 24px;
+  margin: 10px;
+  margin-left: -20px;
+  font-weight: bold;
+}
+.preview-content {
+  height: fit-content;
+  width: fit-content;
+  position: sticky;
+  top: 20%;
+}
+.iframe {
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+.inner-iframe {
+  display: flex;
+  height: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 2s cubic-bezier(1, -0.5, 0.1, 1.5);
+}
+.result {
+  border: none;
+  color: white;
+  word-wrap: break-word;
+  height: 300px;
+  width: 300px;
+  padding: 3px;
+  min-width: 250px;
+  min-height: 250px;
+  transition: all 0.3s ease;
+}
+.link {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+.link * {
+  flex: 1;
+  margin-top: 5px !important;
+}
+.link #open a {
+  margin: 0 !important;
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+.link #edit {
+  display: none;
+}
+
+.list {
+  height: 100vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding-inline: 10px;
+  font-size: 25px;
+  position: fixed;
+  right: 0;
+  z-index: 1;
+  left: unset;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+.list:hover {
+  padding-inline: 20px;
+}
+#list {
+  align-items: center;
+  left: 100vw;
+  display: none;
+  height: 100vh;
+  position: fixed;
+}
+.message-list {
+  height: 80vh;
+  width: 80vw;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: center;
+  padding-inline: 30px;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  overflow: hidden;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+.message-list .item-list {
+  width: 90%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  margin-block: 20px;
+  gap: 20px;
+}
+.message-list .item-list .message {
+  border-right: 2px solid white;
+  border-left: 2px solid white;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 20px;
+  gap: 20px;
+}
+.message-right {
+  display: flex;
+  gap: 20px;
+  overflow: hidden;
+}
+.message-right .message-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  overflow: hidden;
+}
+.message-right .message-wrapper .msg {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+}
+.message-right .message-wrapper .listTitle {
+  font-size: 20px;
+}
+.message-right .message-wrapper .listDescription {
+  font-size: 12px;
+}
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.button-wrapper .btn {
+  padding: 3px 10px;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+  transition: all 0.3s ease;
+}
+.button-wrapper .btn:hover {
+  background-color: white;
+}
+.button-wrapper .btn:hover * {
+  color: #16161b;
+}
+.button-wrapper .btn a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 920px) {
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  .acc-container {
+    display: flex;
+    height: fit-content;
+    position: relative;
+    align-items: flex-end;
+    margin-block: 20px;
+  }
+  .acc-container .section-right {
+    gap: 10px;
+    flex-direction: column;
+  }
+  .acc-container .acc-button {
+    gap: 10px;
+  }
+  .container {
+    flex-direction: column-reverse;
+    gap: 20px;
+    align-items: center;
+  }
+  .preview {
+    min-height: fit-content;
+    display: flex;
+    justify-content: center;
+  }
+  .preview .preview-content {
+    top: 0;
+    position: relative;
+  }
+  #userWrap:hover #logout {
+    width: 0;
+  }
+  #userWrap:active #logout {
+    width: 20px;
+  }
+  #list {
+    justify-content: flex-end;
+  }
+  .message-list {
+    padding-inline: 0;
+  }
+  .message {
+    flex-direction: column;
+  }
+  .message-right {
+    width: 100%;
+  }
+  .message-right p {
+    display: none;
+  }
+  .button-wrapper {
+    justify-content: flex-end !important;
+  }
+}

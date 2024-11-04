@@ -1,0 +1,12 @@
+.triangle {
+  position: fixed;
+  z-index: -100;
+  opacity: 1;
+  transition: top 5s ease-out, left 5s ease-out, opacity 1s ease;
+}
+
+@media only screen and (max-width: 600px) {
+  .triangle {
+    opacity: 0;
+  }
+}

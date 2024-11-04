@@ -1,0 +1,152 @@
+.acc-container {
+  display: flex;
+  position: fixed;
+  height: 80px;
+  width: 100vw;
+  top: 0;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  pointer-events: none;
+}
+.acc-container * {
+  pointer-events: all;
+}
+.acc-container > :first-child {
+  margin-left: 20px;
+}
+.acc-container > :last-child {
+  margin-right: 20px;
+}
+.acc-container .section-right {
+  display: flex;
+  gap: 20px;
+  transition: all 0.3s ease;
+}
+.acc-container #setting {
+  height: 30px;
+  position: relative;
+  left: 0;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+.acc-container #setting:hover {
+  transform: rotateZ(405deg);
+}
+.acc-container #info {
+  border: none;
+  font-size: 14px;
+  padding: 0;
+  color: white;
+  font-weight: bold;
+}
+.acc-container .acc-button {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.account {
+  height: fit-content;
+  padding: 3px 15px;
+  color: white;
+  border: 2px solid white;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#user {
+  height: fit-content;
+  padding: 3px 15px;
+  color: white;
+  border: none;
+  border-right: 2px solid white;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.acc-container #logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+  color: white;
+  height: 20px;
+  width: 0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+.acc-container #user {
+  margin-right: 10px;
+}
+.acc-container #userWrap {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+.acc-container #userWrap:hover > #logout {
+  width: 20px;
+}
+.menu-wrapper {
+  display: flex;
+  gap: 15px;
+}
+.menu-wrapper > div {
+  padding-inline: 3px;
+  padding-bottom: 3px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.menu-wrapper > div > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: white;
+}
+.line {
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+  width: 0%;
+}
+.menu-wrapper > div:hover .line {
+  width: 120%;
+}
+
+@media screen and (max-width: 920px) {
+  .acc-container {
+    display: flex;
+    height: fit-content;
+    position: relative;
+    align-items: flex-end;
+    padding-block: 20px;
+    width: 100%;
+  }
+  .acc-container .section-right {
+    gap: 10px;
+    flex-direction: column;
+  }
+  .acc-container .acc-button {
+    gap: 10px;
+  }
+}

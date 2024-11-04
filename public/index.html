@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mail</title>
+  <link rel="icon" href="./asset/favico_mf9_icon.ico" type="image/x-icon">
+  <link rel="icon" href="./asset/favico.png" type="image/png">
+  <link rel="icon" href="./asset/favico.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./src/css/landing.css">
+  <link rel="stylesheet" href="./src/css/nav.css">
+</head>
+<body>
+  <div class="acc-container">
+    <div class="menu-wrapper">
+      <div id="friend">
+        <div class="friend-icon">
+          <img src="./asset/friend.svg" alt="friend" height="15">
+          friend
+        </div>
+        <div class="line"></div>
+      </div>
+      <div id="envelope">
+        <div class="envelope-icon">
+          <img src="./asset/envelope.svg" alt="envelope" height="14">
+          envelope
+        </div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+  <div class="list" id="listBtn">
+    <div class="list-btn">
+      <
+    </div>
+  </div>
+  <div class="container-wrapper">
+    <div class="container" id="formContainer">
+      <form class="form">
+        <div class="link">
+          <button id="copyLink" type="button" disabled>Copy Link</button>
+          <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
+        </div>
+        <div class="link">
+          <button id="generate" type="submit">Generate</button>
+          <button id="edit" type="submit">Edit</button>
+        </div>
+        <textarea name="" id="description" placeholder=" "></textarea>
+        <label for="description" class="label2">Description
+          <span id="cdescription" class="counter"></span>
+        </label>
+        <input type="text" id="title" placeholder=" ">
+        <label for="title" class="label1">Title
+          <span id="ctitle" class="counter"></span>
+        </label>
+      </form>
+      <div class="preview">
+        <div class="preview-content">
+          <p>Preview :</p>
+          <div class="iframe">
+            <div class="inner-iframe">
+              <iframe class="result"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" id="list">
+      <div class="message-list" id="message-list">
+        <div class="item-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #ab223b -->
+
+  <script type="module" src="./src/js/lib/script.js"></script>
+</body>
+</html>
