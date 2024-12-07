@@ -1,46 +1,37 @@
-import { loadAcc } from './authing.js';
-import { readingToken } from '../module/module.mjs';
-import { getAllFriend, addFriend, unFriend, acceptFriend } from '../module/friend.mjs'
-import { portal } from './tool.js';
-import { loadPage } from './opg.js';
+import { loadAcc } from '../../src/js/lib/authing.js';
+import { addFriend, unFriend, acceptFriend, getAllFriend } from '../../src/js/module/friend.mjs';
+import { mode, portal } from '../../src/js/lib/tool.js';
+import { readingToken } from '../../src/js/module/module.mjs';
+import { loadPage } from '../../src/js/lib/opg.js';
 
-const home = document.querySelector('#home');
-const add = document.querySelector('.add');
-const page = document.querySelector('.page-wrapper');
-const friendList = document.querySelector('.friend-list');
 
-document.addEventListener('DOMContentLoaded', () => {
-  
-  if (!localStorage.getItem('pageId')) {
-    localStorage.setItem('pageId', 1);
-  }
 
-  const pageId = parseInt(localStorage.getItem('pageId'));
-  
-  (async () => {
-    
-    await loadAcc('../');
-    
-    const auth = await readingToken();
-    
-    if (!auth) {
-      loadPage(1);
-    }
+export function friendLoad() {
+  const style = document.querySelector('#styleOpg');
+  const script = document.querySelector('#scriptOpg');
+  const main = document.querySelector('.main');
 
-    add.innerHTML += auth ? `<form id="add-friend">
-      <div class="input-label">
-        <input type="text" name="username" placeholder=" " id="username" autocomplete="off">
-        <label for="username">Add Friend</label>
-      </div>
-      <button type="submit">Add Friend</button>
+  style.href = './component/friend/friend.css';
+
+  script.src = './component/friend/friend.js';
+
+  main.innerHTML = `
+    <div class="acc-container"></div>
+    <div class="add">
+      <form id="add-friend">
+        <div class="input-label">
+          <input type="text" name="username" placeholder=" " id="username" autocomplete="off">
+          <label for="username">Add Friend</label>
+        </div>
+        <button type="submit">Add Friend</button>
       </form>
-      ` : '';
-      page.innerHTML += auth ? `
+    </div>
+    <div class="page-wrapper">
       <div class="friends">
         <div class="btn">
           <div class="flex">
             <span id="count"></span>
-            Friend List
+            <p><span>Friend </span>List</p>
           </div>
           <div class="line"></div>
         </div>
@@ -49,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="btn">
           <div class="flex">
             <span id="count"></span>
-            Ongoing Request
+            <p>Ongoing <span>Request</span></p>
           </div>
           <div class="line"></div>
         </div>
@@ -58,27 +49,48 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="btn">
           <div class="flex">
             <span id="count"></span>
-            Pending Request
+            <p>Pending <span>Request</span></p>
           </div>
           <div class="line"></div>
         </div>
       </div>
-    ` : '';
+    </div>
+    <div class="friend-list"></div>
+  `;
+
+  const home = document.querySelector('#home');
+  const friendList = document.querySelector('.friend-list');
+
+  if (!localStorage.getItem('pageId')) {
+    localStorage.setItem('pageId', 1);
+  }
+
+  const pageId = parseInt(localStorage.getItem('pageId'));
+
+  const form = document.querySelector('#add-friend');
+  const friendListBtn = document.querySelector('.friends .btn');
+  console.log(friendListBtn)
+  const onGoingBtn = document.querySelector('.friend-ongoing .btn');
+  const pendingBtn = document.querySelector('.friend-pending .btn');
+
+  const count = document.querySelectorAll('#count');
+
+  if (pageId == 1) {
+    friendListBtn.classList.add('btn-active');
+  } else if (pageId == 2) {
+    onGoingBtn.classList.add('btn-active');
+  } else if (pageId == 3) {
+    pendingBtn.classList.add('btn-active');
+  }
+  
+  (async () => {
     
-    const form = document.querySelector('#add-friend');
-    const friendListBtn = document.querySelector('.friends .btn');
-    const onGoingBtn = document.querySelector('.friend-ongoing .btn');
-    const pendingBtn = document.querySelector('.friend-pending .btn');
-
-    const count = document.querySelectorAll('#count');
-    const pageId = parseInt(localStorage.getItem('pageId'));
-
-    if (pageId == 1) {
-      friendListBtn.classList.add('btn-active');
-    } else if (pageId == 2) {
-      onGoingBtn.classList.add('btn-active');
-    } else if (pageId == 3) {
-      pendingBtn.classList.add('btn-active');
+    await loadAcc();
+    
+    const auth = await readingToken();
+    
+    if (!auth) {
+      loadPage(1)
     }
     
     if (auth) {
@@ -123,16 +135,38 @@ document.addEventListener('DOMContentLoaded', () => {
         loadList();
       }
     });
+
+    window.addEventListener('resize', friendResponsive);
+    window.addEventListener('mousemove', friendResponsive);
+    friendResponsive();
     
-    home.addEventListener('click', () => {
-      portal();
-    });
-    envelope.addEventListener('click', () => {
-      window.location.href = '../envelope'
-    });
+    
     form.addEventListener('submit', follow);
   })()
-});
+}
+
+function friendResponsive() {
+  if (check()) {
+    return
+  }
+
+  if (window.innerWidth > 540) {
+    localStorage.setItem('mode', false);
+  } else {
+    localStorage.setItem('mode', true);
+  }
+}
+
+function check() {
+  if (localStorage.getItem('onPage') !== '2') {
+    console.log('pagee')
+    window.removeEventListener('resize', friendResponsive);
+    window.removeEventListener('mousemove', friendResponsive);
+    return true
+  }
+
+  return false
+}
 
 async function follow(event) {
   event.preventDefault();
@@ -142,7 +176,6 @@ async function follow(event) {
     await addFriend(username.value);
     window.location.reload();
   }
-
 }
 
 async function unfollow(event) {
@@ -159,10 +192,21 @@ async function acceptfriend(event) {
   window.location.reload();
 }
 
+window.l = loadList
+window.s = getAllFriend
+
 async function loadList() {
   const pageId = localStorage.getItem('pageId');
 
-  friendList.innerHTML = '';
+  console.log('a')
+
+  if (localStorage.getItem('loadFriendList') || localStorage.getItem('onPage') != '2') {
+    return
+  }
+
+  localStorage.setItem('loadFriendList', 1);
+
+  const friendList = document.querySelector('.friend-list');
 
   const data = await getAllFriend();
   count[0].innerHTML = `( ${data.lengthData} )`;
@@ -174,6 +218,11 @@ async function loadList() {
   friendList.style.removeProperty('flex');
   friendList.style.removeProperty('align-items');
   friendList.style.removeProperty('justify-content');
+
+  console.log(data, dataOnGoing, dataPending, pageId)
+  console.log('b')
+
+  friendList.innerHTML = ''
 
   if (data && pageId == 1) {
     console.log('a')
@@ -188,7 +237,7 @@ async function loadList() {
           <div id="name" name-id="${index}">${user.username}</div>
           <div class="option">
             <div id="unfriend" x-data="${index}">
-              <img src="../asset/unfriend.svg" alt="home" height="15">
+              <img src="./asset/unfriend.svg" alt="unfriend" height="15">
               Unfriend
             </div>
             <div id="info">Info</div>
@@ -214,7 +263,7 @@ async function loadList() {
           <div id="name" name-id="${index}">${user.username}</div>
           <div class="option">
             <div id="addfriend" x-data="${index}">
-              <img src="../asset/addfriend.svg" alt="addfriend" height="15">
+              <img src="./asset/addfriend.svg" alt="addfriend" height="15">
               Accept
             </div>
             <div id="reject">Reject</div>
@@ -264,6 +313,8 @@ async function loadList() {
       afbutton.addEventListener('click', acceptfriend)
     });
   }
+
+  localStorage.removeItem('loadFriendList');
 
   return
 }

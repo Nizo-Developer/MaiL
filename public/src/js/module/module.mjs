@@ -108,6 +108,8 @@ export function readData(id) {
   return new Promise((resolve, reject) => {
     const dataRef = ref(database, `message/${id}`);
 
+    console.log(id)
+
     get(dataRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -167,6 +169,9 @@ export function readingToken() {
           }
         })
         .catch((error) => {
+          if (String(error).includes('offline')) {
+            window.location.reload()
+          }
           console.error('Error:', error);
         });
     } else {
@@ -276,12 +281,16 @@ export function signup(username, password) {
 }
 
 export function wordCount(words) {
-  // console.log(String(words))
-  // console.log(String(words).split(' '))
   return (
     String(words).split(' ').filter(Boolean).length +
     String(words).split('\n').filter(Boolean).length - 1
   ) ;
+}
+
+export function letterCount(words) {
+  return (
+    String(words).length
+  )
 }
 
 export function getAuthor(userId) {
@@ -342,7 +351,7 @@ export function encrypt(text) {
   var unicode = Array.from(text).map(ord => ord.codePointAt(0));
   return unicode.map(hex => hex.toString(16)).join('g')
 }
-
+window.de = decrypt
 export function decrypt(text) {
   var ununicode = text.split('g').map(uni => String.fromCodePoint(parseInt(uni, 16)));
 

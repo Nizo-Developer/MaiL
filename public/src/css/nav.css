@@ -136,10 +136,7 @@
 @media screen and (max-width: 920px) {
   .acc-container {
     display: flex;
-    height: fit-content;
     position: relative;
-    align-items: flex-end;
-    padding-block: 20px;
     width: 100%;
   }
   .acc-container .section-right {

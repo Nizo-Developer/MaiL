@@ -1,0 +1,84 @@
+.wht-screen {
+  z-index: 1000000;
+  height: 100dvh;
+  width: 100dvw;
+  background-color: #fff;
+  opacity: 1;
+  position: fixed;
+  pointer-events: none;
+  transition: all 1s ease;
+}
+
+.sidebar-wrapper {
+  --border-width: 2px;
+  
+  height: 100dvh;
+  width: calc(var(--width) - (var(--width) - var(--border-width) - 25px));
+  position: fixed;
+  z-index: 10;
+  border-right: 2px solid white;
+  padding-block: 18px;
+  padding-inline: calc((var(--width) - var(--border-width) - 25px) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  overflow-x: hidden;
+  transition: all 0.3s ease;
+}
+.sidebar-toggle {
+  cursor: pointer;
+}
+.side-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu {
+  position: relative;
+  left: 0;
+  display: flex;
+  gap: 0px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.hide {
+  overflow: hidden;
+  width: 0;
+  transition: all 0.3s ease;
+}
+.hide p {
+  text-wrap: nowrap;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 540px) {
+  .sidebar-wrapper {
+    width: 100dvw !important;
+    height: 60px;
+    bottom: 0;
+    flex-direction: row;
+    border: none;
+    border-top: 2px solid white;
+    padding: unset;
+    transition: width 0s;
+  }
+  .sidebar-toggle {
+    display: none;
+  }
+  .side-wrapper {
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .menu {
+    left: 0 !important;
+  }
+  .menu > .hide {
+    display: none;
+  }
+}
+

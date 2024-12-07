@@ -1,8 +1,8 @@
 import { readingToken } from '../module/module.mjs';
 
-const accWrap = document.querySelector('.acc-container');
 
 export async function loadAcc(path = './') {
+  const accWrap = document.querySelector('.acc-container');
   const account = await readingToken();
   console.log(account)
 
@@ -43,14 +43,21 @@ export async function loadAcc(path = './') {
   }
 
   const signin = document.getElementById('signin');
-  const out = document.getElementById('logout');
 
   if (signin) {
     signin.addEventListener('click', () => {
       acc(1, path)
     });
-  } else {
-    out.addEventListener('click', logout)
+  } 
+
+  defineLogout()
+}
+
+export function defineLogout() {
+  if (localStorage.getItem('token')) {
+    const out = document.getElementById('logout');
+  
+    out.addEventListener('click', logout);
   }
 }
 

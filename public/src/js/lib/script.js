@@ -1,19 +1,16 @@
 import { encrypt, decrypt, createData, updateData, readingToken, wordCount, getAllMessage, readData, checkUser } from '../module/module.mjs';
 import { loadAcc, logout } from './authing.js';
+import { copy, link, mode, selectionFormating, editMessage, titleAct, descriptionAct } from './tool.js';
 
 const body = document.querySelector('body')
 
 const title = document.getElementById('title');
 const description = document.getElementById('description');
-const count1 = document.getElementById('ctitle');
-const count2 = document.getElementById('cdescription');
 const resultHead = document.querySelector('.iframe');
 const resultAnimate = document.querySelector('.inner-iframe');
 const result = document.querySelector('.result');
 const copyLink = document.getElementById('copyLink');
 const label = document.querySelectorAll('label');
-const openlink = document.getElementById('openLink');
-const openBtn = document.getElementById('open');
 const form = document.querySelector('.form');
 
 const conWrap = document.querySelector('.container-wrapper');
@@ -23,24 +20,45 @@ const messageList = document.getElementById('list');
 const listParent = document.querySelector('.message-list');
 const listContent = document.querySelector('.item-list');
 
+const previewBtn = document.querySelector('#previewBtn')
+const newThing = document.querySelector('.new')
+
 const family = document.querySelector('#friend');
-var focused;
+
+const theme = document.querySelector('theme').attributes[0].value;
 
 document.addEventListener('DOMContentLoaded', () => {
   
   (async () => {
     await loadAcc();
-    await loadList();
+    if (theme == 1) {
+      await loadList();
+    }
     
     console.log('load')
     localStorage.removeItem('id')
   })()
-  list.addEventListener('click', togglePage);
+
+  localStorage.setItem('preview', 0)
+
+  if (window.innerWidth > 540) {
+    localStorage.setItem('mode', false);
+  } else {
+    localStorage.setItem('mode', true);
+  }
+
+  console.log(theme)
+
+  if (theme == 1) {
+    list.addEventListener('click', togglePage);
+    result.addEventListener('load', previewScale);
+    newThing.addEventListener('click', newInterface);
+  } 
   form.addEventListener('submit', link);
   copyLink.addEventListener('click', copy);
   document.addEventListener('selectionchange', selectionFormating);
   window.addEventListener('resize', responsive);
-  result.addEventListener('load', previewScale);
+  window.addEventListener('mousemove', responsive)
   responsive();
 });
 
@@ -52,6 +70,58 @@ friend.addEventListener('click', () => {
 envelope.addEventListener('click', () => {
   window.location.href = './envelope'
 });
+
+function responsive() {
+  if (window.innerWidth > 540) {
+    localStorage.setItem('mode', false);
+  } else {
+    localStorage.setItem('mode', true);
+  }
+
+  const form = document.querySelector('.form');
+  const list = document.getElementById('message-list');
+
+  if (theme == 1) {
+    const listWidth = messageList.getBoundingClientRect().width;
+  }
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const responsive = window.innerWidth * 0.5 - 33
+
+  const main = document.querySelector('.main');
+  const preview = document.querySelector('.preview');
+  const button = document.querySelector('.preview-btn');
+  const previewWrap = document.querySelector('.preview-wrapper');
+  
+  form.style.width = responsive + 'px';
+  if (theme == 1) {
+    resultHead.style.height = height * 0.5 + 'px';
+    resultHead.style.width = width * 0.5 - 33 + 'px';
+    result.style.height = height * 0.5 - 3 + 'px';
+    result.style.width = width * 0.5 - 36 + 'px';
+  } else {
+    preview.style.width = main.getBoundingClientRect().width + 'px';
+    previewWrap.style.width = main.getBoundingClientRect().width + 'px';
+    
+    if (localStorage.getItem('preview') == '1') {
+      preview.style.height = `calc(100dvh - ${mode() ? '175.5px' : '115.5px'} - 4px)`;
+      preview.style.bottom = mode() ? '95.5px' : '35.5px';
+      button.style.top = `calc(100dvh - ${mode() ? '85px' : '25px'})`;
+    }
+  }
+}
+
+function newInterface() {
+  newThing.style.height = '500vh';
+  newThing.style.width = '500vh';
+  newThing.style.right = '-250vh';
+  newThing.style.bottom = '-250vh';
+  localStorage.setItem('neww', 1);
+  setTimeout(() => {
+    window.location.href = './newinterface.html'
+  }, 800);
+}
 
 function previewScale() {
   const iframeDocument = result.contentDocument || result.contentWindow.document;
@@ -74,26 +144,6 @@ function previewScale() {
     element.style.gap = newGap + 'px';
   });
   resultAnimate.style.height = 100 + '%';
-}
-
-function titleAct() {
-  if (wordCount(title.value) > 0) {
-    count1.innerHTML = `( ${wordCount(title.value)} )`
-  } else {
-    count1.innerHTML = '';
-  }
-}
-
-function descriptionAct() {
-  description.style.height = 'auto';
-  if (wordCount(description.value) > 0) {
-    description.style.height = description.scrollHeight + 'px';
-    count2.innerHTML = `( ${wordCount(description.value)} )`
-  } else {
-    description.removeAttribute('style');
-    count2.innerHTML = '';
-  }
-  form.style.marginTop = description.scrollHeight < window.innerHeight / 4 ? description.scrollHeight  + 'px' : window.innerHeight / 4 + 'px';
 }
 
 window.onerror = function(message, source, lineno, colno, error) {
@@ -151,6 +201,7 @@ async function loadList() {
         content.appendChild(buttonContent);
         
         const share = btn.cloneNode(true);
+        // ashare.setAttribute('onclick', `shareMessage(${key})`)
         share.setAttribute('id', 'share-list');
         
         const ashare = anchor.cloneNode(true)
@@ -268,174 +319,7 @@ function togglePage() {
   }
 }
 
-async function editMessage(messageId) {
-  localStorage.setItem('id', messageId)
-  const id = localStorage.getItem('id');
-  const data = await readData(id);
-
-  title.value = decrypt(data.title);
-  description.value = decrypt(data.description);
-  if (localStorage.getItem('id')) {
-    edit.style.display = 'block'
-  }
-
-  var resultSrc = 'Mail.html?id=' + messageId;
+// async function shareMessage(messageId) {
   
-  result.src = resultSrc
-  openlink.href = resultSrc
-  openBtn.removeAttribute('disabled')
-  copyLink.removeAttribute('disabled')
+// }
 
-  titleAct();
-  descriptionAct();
-  togglePage();
-}
-
-async function link(event) {
-  event.preventDefault();
-
-  const id = event.submitter.id[0] == 'g' ? 0 : (event.submitter.id[0] == 'e' ? 1 : null) 
-
-  try {
-    
-    if (title.value && description.value) {
-      console.log(formating(title.value))
-      var message_id = await (id == 0 ?
-        createData(
-          encrypt(formating(title.value)), 
-          encrypt(formating(description.value))
-        ) : ( id == 1 ?
-        updateData(
-          localStorage.getItem('id'),
-          encrypt(formating(title.value)), 
-          encrypt(formating(description.value))
-        ) : null
-      ))
-      console.log(message_id)
-      
-      if (localStorage.getItem('id')) {
-        edit.style.display = 'block'
-      }
-      
-      var resultSrc = 'Mail.html?id=' + message_id;
-      
-      result.src = resultSrc;
-      console.log(openlink)
-      openlink.href = resultSrc;
-      openBtn.removeAttribute('disabled')
-      copyLink.removeAttribute('disabled')
-      await loadList();
-    } else {
-      if (!title.value) {
-        label[0].style.color = 'red'
-      }
-      if (!description.value) {
-        label[1].style.color = 'red'
-      }
-
-      
-      setTimeout(() => {
-        label.forEach((i, index) => {
-          i.removeAttribute('style')
-        });
-      }, 3000);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-function responsive() {
-  const form = document.querySelector('.form');
-  const list = document.getElementById('message-list');
-  const listWidth = messageList.getBoundingClientRect().width;
-
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const responsive = window.innerWidth * 0.5 - 33
-
-  console.log(listWidth)
-  
-  form.style.width = responsive + 'px';
-  resultHead.style.height = height * 0.5 + 'px';
-  resultHead.style.width = width * 0.5 - 33 + 'px';
-  result.style.height = height * 0.5 - 3 + 'px';
-  result.style.width = width * 0.5 - 36 + 'px';
-}
-
-function selectionFormating() {
-  var selected = window.getSelection();
-  var selectionText = selected.toString();
-  var enableFormating = true;
-
-  var keyBtn = ['b', 'i', 's', 'p']
-  var keyIndi = ['*', '_', '-', '```']
-
-  // console.log(selectionText)
-
-  title.addEventListener('click', () => {
-    focused = 1
-  });
-  description.addEventListener('click', () => {
-    focused = 2
-  });
-  var tag = focused == 1 ? title : description
-  var indexStart = tag.selectionStart
-  
-  if (selectionText && enableFormating) {
-    console.log('hi')
-    enableFormating = false
-
-    document.addEventListener('keydown', fm)
-
-    function fm(event)  {
-      console.log(event.key)
-      console.log(selectionText)
-      var indi = event.key in keyBtn ? keyIndi[keyBtn.indexOf(event.key)] : ''
-
-      console.log(event.ctrlKey, event.key in keyBtn)
-      console.log(focused)
-      console.log(event.ctrlKey && event.key in keyBtn && focused)
-
-      if (event.ctrlKey && event.key in keyBtn && focused) {
-        
-        console.log(indexStart)
-        console.log(tag)
-        console.log(tag.value)
-        var spesificRegex = new RegExp(`^.{${indexStart}}(.{${selectionText.length}})`, 'g')
-        console.log(tag.value.match(spesificRegex))
-        console.log(spesificRegex)
-        console.log(selectionText)
-
-        
-
-        tag.value = tag.value.replace(spesificRegex, `${indi}${tag.value.match(spesificRegex)}${indi}`)
-        
-      }
-      
-      if (indi) {
-        document.removeEventListener('keydown', fm)      
-      }
-    }
-  }
-}
-
-function formating(text) {
-  var character = ['_', '\\*', '-', '```']
-  var tag = ['i', 'b', 's', 'pre']
-  
-  character.map((i, index) => {
-    var formatingRegex = new RegExp(`${i}(.*?)${i}`, 'g')
-    text = text.replace(formatingRegex, `<${tag[index]}>$1</${tag[index]}>`)
-  })
-
-  return text
-}
-
-function copy() {
-  navigator.clipboard.writeText(result.src)
-}
-
-
-
-window.editMessage = editMessage;

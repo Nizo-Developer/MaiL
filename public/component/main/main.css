@@ -1,0 +1,270 @@
+* {
+  font-family: monospace;
+  color: white;
+}
+*::-webkit-scrollbar {
+  width: 5px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 1000px 0 0 1000px;
+  margin-block: 10px;
+  background-color: #353541;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #0c0c0f;
+  border-radius: 1000px 0 0 1000px;
+}
+
+body {
+  margin: 0;
+  background-color: #16161b;
+}
+
+.wht-screen {
+  z-index: 1000000;
+  height: 100dvh;
+  width: 100dvw;
+  background-color: #fff;
+  opacity: 1;
+  position: fixed;
+  pointer-events: none;
+  transition: all 1s ease;
+}
+
+section {
+  --width: 70px;
+
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: var(--width) 1fr;
+  transition: all 0.3s ease;
+}
+
+.menu {
+  position: relative;
+  left: 0;
+  display: flex;
+  gap: 0px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hide {
+  overflow: hidden;
+  width: 0;
+  transition: all 0.3s ease;
+}
+
+.hide p {
+  text-wrap: nowrap;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.preview-container {
+  z-index: 2;
+  position: fixed;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+.preview-container * {
+  pointer-events: all;
+}
+.preview-transition {
+  --height: 200px;
+  background-color: #fff;
+  height: var(--height);
+  width: var(--height);
+  border-radius: 1000px;
+  position: relative;
+  top: calc(var(--height) * -1 + 30px);
+  display: flex;
+  justify-content: center;
+  transition: height 1.5s ease, width 1.5s ease, top 0.8s ease;
+  overflow: hidden;
+}
+.preview-wrapper {
+  height: 100dvh;
+  width: 100%;
+  position: sticky;
+  top: 50vh;
+  pointer-events: none;
+  overflow: hidden;
+}
+.preview {
+  position: absolute;
+  height: calc(100dvh - 115.5px - 4px);
+  bottom: 100dvh;
+  width: 100%;
+  border-top: 2px solid #16161b;
+  border-bottom: 2px solid #16161b;
+  transition: bottom 1s ease;
+  transition-delay: 0.2s;
+}
+.preview > iframe {
+  border: none;
+  height: calc(100% - 4px);
+  width: 100%;
+}
+.preview-btn {
+  cursor: pointer;
+  color: #16161b;
+  position: absolute;
+  top: 5px;
+  display: flex;
+  transition: all 1s ease;
+}
+
+.acc-container {
+  position: absolute !important;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  width: 50%;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  transition: all 1s ease;
+}
+#formContainer {
+  position: relative;
+  right: 0;
+}
+.form {
+  min-width: 300px;
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding-block: 50px;
+  margin-top: 0 !important;
+}
+.form input, .form textarea {
+  font-size: 14px;
+}
+.form div button {
+  cursor: pointer;
+  font-size: 14px;
+  background-color: transparent;
+  border: 1px solid white;
+  padding-block: 3px;
+  color: white;
+  transition: all 0.3s ease;
+}
+.form div button #openLink {
+  color: white;
+}
+.form div button:hover {
+  background-color: white;
+  color: #16161b;
+}
+.form div button:hover #openLink {
+  color: #16161b;
+}
+.form input {
+  padding-bottom: 10px;
+}
+.form label {
+  width: fit-content;
+  margin-top: 8px;
+  font-size: 30px;
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
+  margin-bottom: -45px;
+  pointer-events: none;
+  user-select: none;
+}
+.form label .counter {
+  color: white;
+  font-size: 12px;
+}
+.form input, .form textarea {
+  height: auto;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  color: white;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+.form input:focus, .form textarea:focus {
+  outline: none;
+}
+.form textarea {
+  width: 100%;
+  padding: 0;
+  padding-block: 3px;
+  resize: none;
+}
+.form .label2 {
+  margin-top: 30px;
+  margin-bottom: -55px;
+}
+.form #title:focus ~ .label1 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 36px;
+}
+.form #title:focus ~ .label1 .counter {
+  letter-spacing: 1px;
+}
+.form #title:placeholder-shown ~ .label1 {
+  color: white;
+}
+.form #title:not(:placeholder-shown) ~ .label1 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 36px;
+}
+.form #description:focus ~ .label2 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 36px;
+}
+.form #description:focus ~ .label2 .counter {
+  letter-spacing: 1px;
+}
+.form #description:placeholder-shown ~ .label2 {
+  color: white;
+}
+.form #description:not(:placeholder-shown) ~ .label2 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 36px;
+}
+
+.link {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+.link * {
+  flex: 1;
+  margin-top: 5px !important;
+}
+.link #open a {
+  margin: 0 !important;
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+.link #edit {
+  display: none;
+}

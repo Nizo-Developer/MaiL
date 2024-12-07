@@ -30,6 +30,36 @@ body {
 button {
   cursor: pointer;
 }
+
+.wht {
+  z-index: 99999;
+  height: 100dvh;
+  width: 100dvw;
+  overflow: hidden;
+  position: fixed;
+  pointer-events: none;
+}
+.new {
+  cursor: pointer;
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  background-color: #fff;
+  right: -50px;
+  bottom: -50px;
+  border-radius: 10000px;
+  box-shadow: 0 0 0 10px #353541;
+  transition: height 0.8s ease, width 0.8s ease, box-shadow 1.2s ease, right 0.8s ease, bottom 0.8s ease;
+  pointer-events: all;
+}
+.new:hover {
+  height: 70px;
+  width: 70px;
+  box-shadow: 0 0 0 16px #353541;
+  right: -35px;
+  bottom: -35px;
+}
+
 .container-wrapper {
   display: flex;
   position: relative;
@@ -343,6 +373,18 @@ button {
   color: white;
   transition: all 0.3s ease;
 }
+
+
+/* SHARE WRAPPER */
+#share-wrapper {
+  position: fixed;
+  right: 0;
+  height: 100dvh;
+  width: 200px;
+  background-color: #fff;
+}
+
+
 
 @media screen and (max-width: 920px) {
   body {

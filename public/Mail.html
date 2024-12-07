@@ -96,11 +96,11 @@
         const config = data.config
         console.log(config.display_author)
         
-        title.innerHTML = decrypt(data['title'])
-        description.innerHTML = decrypt(data['description'])
+        title.textContent = decrypt(data['title'])
+        description.textContent = decrypt(data['description'])
         const displayName = await getAuthor(data.author);
         if (config.display_author) {
-          author.innerHTML = 'Author: ' + (data.author != 'anonymous' ? displayName : 'anonymous');
+          author.textContent = '~ ' + (data.author != 'anonymous' ? displayName : 'anonymous');
         }
       } catch (error) {
         console.error('Error:', error);
