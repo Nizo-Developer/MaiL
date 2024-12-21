@@ -2,6 +2,7 @@ import { loadAcc } from "../../src/js/lib/authing.js";
 import { loadPage } from "../../src/js/lib/opg.js";
 import { colorChange } from "../../src/js/lib/sidebar.js";
 import { changeMonoSvg, copy, descriptionAct, editMessage, link, mode, selectionFormating, titleAct } from "../../src/js/lib/tool.js";
+import { toggleShare } from "../share-part/share.js";
 
 export function mainLoad() {
   const style = document.querySelector('#styleOpg');
@@ -27,7 +28,7 @@ export function mainLoad() {
     <div class="container" id="formContainer">
       <form class="form">
         <div class="link">
-          <button id="copyLink" type="button" disabled>Copy Link</button>
+          <button id="shareBtn" type="button" disabled>Share</button>
           <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
         </div>
         <div class="link">
@@ -49,7 +50,9 @@ export function mainLoad() {
   (async () => {
     await loadAcc();
 
-    localStorage.removeItem('id');
+    if (!localStorage.getItem('edit-mode')) {
+      localStorage.removeItem('id');
+    }
   })();
 
   if (localStorage.getItem('id')) {
@@ -59,10 +62,13 @@ export function mainLoad() {
   const previewBtn = document.querySelector('#previewBtn');
   const title = document.getElementById('title');
   const description = document.getElementById('description');
+  const share = document.querySelector('#shareBtn')
   const form = document.querySelector('.form');
 
   form.addEventListener('submit', link);
-  copyLink.addEventListener('click', copy);
+  share.addEventListener('click', () => {
+    toggleShare(undefined, 1)
+  });
   document.addEventListener('selectionchange', selectionFormating);
   previewBtn.addEventListener('click', preview);
   title.addEventListener('input', titleAct)

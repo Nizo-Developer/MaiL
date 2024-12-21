@@ -1,3 +1,4 @@
+import { toggleProfile } from '../../../component/profile-part/profile.js';
 import { readingToken } from '../module/module.mjs';
 
 
@@ -14,7 +15,7 @@ export async function loadAcc(path = './') {
 
     const logout = document.createElement('div');
     logout.setAttribute('id', 'logout');
-    logout.innerHTML = 'x';
+    logout.textContent = 'x';
 
     const user = document.createElement('div');
     user.setAttribute('id', 'userWrap');
@@ -23,7 +24,11 @@ export async function loadAcc(path = './') {
 
     accWrap.appendChild(user)
 
-    console.log('s')
+    const profilePhoto = document.querySelector('.photo-frame > img');
+    const profileName = document.querySelector('.user-info > .user-username');
+
+    profilePhoto.src = account.photoprofile;
+    profileName.textContent = account.username;
 
   } else {
     const secRight = document.createElement('div');
@@ -43,12 +48,21 @@ export async function loadAcc(path = './') {
   }
 
   const signin = document.getElementById('signin');
+  const profile = document.querySelector('#user');
+  const photoProfile = document.querySelector('.photo-frame > img').src;
+
+  localStorage.setItem('pp', photoProfile)
 
   if (signin) {
+    console.log('h')
     signin.addEventListener('click', () => {
-      acc(1, path)
+      acc(1, path);
     });
-  } 
+  } else { 
+    profile.addEventListener('click', () => {
+      toggleProfile(undefined, 1);
+    }); 
+  }
 
   defineLogout()
 }

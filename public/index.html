@@ -3,85 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mail</title>
+  <meta name="description" content="Main Page (one page browser)">
+  <meta name="copyright" content="© 2024 MaiL. All rights reserved.">
+  <meta name="author" content="nizo5671">
+  <title>MaiL</title>
+  <link rel="preconnect" href="https://www.gstatic.com">
+  <link id="styleOpg" rel="stylesheet" href="">
+  <link rel="stylesheet" href="./src/css/sidebar.css">
+  <link rel="stylesheet" href="./src/css/sidebar.css">
+  <link rel="stylesheet" href="./component/share-part/share.css">
+  <link rel="stylesheet" href="./component/profile-part/profile.css">
+  <link rel="stylesheet" href="./component/up-image-part/up-image.css">
+  <link rel="stylesheet" href="./src/css/nav.css">
+  <link rel="stylesheet" href="./src/css/new.css">
   <link rel="icon" href="./asset/favico_mf9_icon.ico" type="image/x-icon">
   <link rel="icon" href="./asset/favico.png" type="image/png">
   <link rel="icon" href="./asset/favico.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./src/css/landing.css">
-  <link rel="stylesheet" href="./src/css/nav.css">
-  <theme content="1"></theme>
+  <theme content="2"></theme>
 </head>
 <body>
-  <div class="wht">
-    <div class="new"></div>
-  </div>
-  <div class="acc-container">
-    <div class="menu-wrapper">
-      <div id="friend">
-        <div class="friend-icon">
-          <img src="./asset/friend.svg" alt="friend" height="15">
-          friend
-        </div>
-        <div class="line"></div>
+  <section>
+    <div class="wht-screen"></div>
+    <div class="dummy"></div>
+    <div class="sidebar-wrapper">
+      <div class="sidebar-toggle" id="sidebar">
+        <img src="./asset/menu.svg" alt="" width="25">
       </div>
-      <div id="envelope">
-        <div class="envelope-icon">
-          <img src="./asset/envelope.svg" alt="envelope" height="14">
-          envelope
+      <div class="side-wrapper">
+        <div class="menu" id="home">
+          <img src="./asset/home.svg" alt="" width="20">
+          <div class="hide">
+            <p>Home</p>
+          </div>
         </div>
-        <div class="line"></div>
+        <div class="menu" id="friend">
+          <img src="./asset/friend.svg" alt="" width="20">
+          <div class="hide">
+            <p>Friend</p>
+          </div>
+        </div>
+        <div class="menu" id="envelope">
+          <img src="./asset/envelope.svg" alt="" width="20">
+          <div class="hide">
+            <p>Envelope</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="list" id="listBtn">
-    <div class="list-btn">
-      <
+    <div class="sec-section">
+      <div id="uploadImage">
+        <div class="upload-page">
+          <div class="upload-back">
+            <img src="./asset/xback.svg" alt="back" height="15">
+          </div>
+          <div class="upload-content">
+            <p>Drop an image or upload an image</p>
+            <div class="upload-btn">Upload Image</div>
+            <input type="file" name="image" id="file-portal" accept="image/*" hidden>
+          </div>
+          <div class="drag-area">
+            <div class="drag-input">
+              <p>Drop an image here</p>
+            </div>
+          </div>
+          <div class="upload-confirm">
+            <div class="confirm-no">
+              <div>
+                <img src="./asset/xback.svg" alt="" height="15">
+                <p>
+                  Cancel
+                </p>
+              </div>
+            </div>
+            <div class="confirm-yes">
+              <div>
+                <img src="./asset/check.svg" alt="" height="15">
+                <p>
+                  Confirm
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="profile-wrapper">
+        <div class="profile-page">
+          <div class="profile-head">
+            <div class="profile-back">
+              <img src="./asset/xback.svg" alt="X" height="15">
+            </div>
+          </div>
+          <div class="profile-main">
+            <div class="profile-info">
+              <div class="profile-title">Profile</div>
+              <div class="profile-card">
+                <!-- <div class="card-pattern"></div>  -->
+                <div class="photo-profile">
+                  <div class="photo-banner"></div>
+                  <div class="photo-frame">
+                    <img src="./asset/defaultprofile.png" alt="">
+                    <div class="photo-change">
+                      <img src="./asset/img.svg" alt="" height="20">
+                      <p>
+                        change <br>photo profile
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-info">
+                  <div class="user-username">
+                    ini namamu
+                  </div>
+                  <!-- <div class="user-bio">
+                    ini bio
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <div class="profile-setting">
+  
+            </div>
+          </div> 
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="container-wrapper">
-    <div class="container" id="formContainer">
-      <form class="form">
-        <div class="link">
-          <button id="copyLink" type="button" disabled>Copy Link</button>
-          <button id="open" disabled><a id="openLink" target="_blank">Open In New Tab</a></button>
-        </div>
-        <div class="link">
-          <button id="generate" type="submit">Generate</button>
-          <button id="edit" type="submit">Edit</button>
-        </div>
-        <textarea name="" id="description" placeholder=" "></textarea>
-        <label for="description" class="label2">Description
-          <span id="cdescription" class="counter"></span>
-        </label>
-        <input type="text" id="title" placeholder=" ">
-        <label for="title" class="label1">Title
-          <span id="ctitle" class="counter"></span>
-        </label>
-      </form>
-      <div class="preview">
-        <div class="preview-content">
-          <p>Preview :</p>
-          <div class="iframe">
-            <div class="inner-iframe">
-              <iframe class="result"></iframe>
+    <div id="share">
+      <div class="background"></div>
+      <div message-id></div>
+      <div class="share-wrapper">
+        <div class="share-page">
+          <div class="share-head">
+            <div class="row-reverse">
+              <input type="text" id="search" placeholder=" ">
+              <label for="search">Search:</label>
+            </div>
+            <div id="back">
+              X
+            </div>
+          </div>
+          <div class="share-friend">
+            <div class="share-log"></div>
+            <div class="share-friendlist"></div>
+          </div>
+          <div class="share-other">
+            <div id="copyLink">
+              <p></p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="container" id="list">
-      <div class="message-list" id="message-list">
-        <div class="item-list"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- <div id="share-wrapper">
-    
-  </div> -->
-
-  <!-- #ab223b -->
-
-  <script type="module" src="./src/js/lib/script.js"></script>
+    <div class="main"></div>
+  </section>
+  <script id="scriptOpg" type="module" src=""></script>
+  <script type="module" src="./src/js/lib/sidebar.js"></script>
+  <script type="module" src="./component/share-part/share.js"></script>
+  <script type="module" src="./component/profile-part/profile.js"></script>
+  <script type="module" src="./component/up-image-part/up-image.js"></script>
+  <script type="module" src="./src/js/lib/opg.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
 </body>
 </html>

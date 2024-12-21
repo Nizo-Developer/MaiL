@@ -1,0 +1,153 @@
+:root {
+  --gr: 1.618;
+}
+
+.profile-wrapper {
+  /* position: fixed; */
+  position: relative;
+  /* right: -320px; */
+  height: calc(100dvh - 20px);
+  width: 300px;
+  background-color: #16162b;
+  display: flex;
+  border-radius: 0 0 0 15px;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  transition: all 0.3s ease;
+  pointer-events: all;
+}
+
+.profile-page {
+  flex: 1;
+  margin: 20px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.profile-back {
+  cursor: pointer;
+  width: fit-content;
+}
+.profile-back img {
+  pointer-events: none;
+}
+
+.profile-main > * {
+  flex: 1;
+  padding: 10px;
+}
+.profile-info {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+}
+
+.profile-title {
+  margin-top: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  border: 3px solid transparent;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  /* border-right: 1px solid white; */
+}
+
+.card-pattern {
+  position: absolute;
+  background-image: url(../../asset/envelopepattern.png);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-size: cover;
+}
+.card-pattern::after {
+  content: "";
+  display: block;
+  flex: 1;
+  margin: 10px;
+  border: 8px;
+  background-color: white;
+}
+
+.photo-profile {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.photo-banner {
+  top: 0;
+  position: absolute;
+  height: 40%;
+  width: 100%;
+}
+.photo-profile * {
+  pointer-events: none;
+}
+.photo-frame {
+  pointer-events: all;
+  position: relative;
+  cursor: pointer;
+  margin: 40px 20px;
+  border-radius: 10000px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  flex: 1;
+  max-width: 150px;
+  outline: 5px solid white;
+  outline-offset: 3px;
+}
+.photo-frame > img {
+  width: 100%;
+}
+.photo-change {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background-color: #16162b00;
+  opacity: 0;
+  text-align: center;
+  gap: 5px;
+}
+.photo-change p {
+  margin: 0;
+}
+.photo-frame:hover .photo-change {
+  background-color: #16162b96;
+  opacity: 1;
+}
+
+.user-username {
+  font-size: 24px;
+}
+.user-bio {
+  font-size: calc(24px / var(--gr));
+}
+
+@media screen and (max-width: 750px) {
+  .profile-wrapper {
+    height: 100dvh;
+    border-radius: unset;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .profile-wrapper {
+    width: 100dvw;
+    border: none;
+  }
+}

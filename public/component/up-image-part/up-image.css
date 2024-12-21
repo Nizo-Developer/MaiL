@@ -1,0 +1,182 @@
+#uploadImage {
+  top: 0;
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 13;
+}
+.upload-page {
+  position: relative;
+  background-color: #fff;
+  padding-inline: 20px;
+  height: calc(100dvh - 100px);
+  width: calc(100% - 80px);
+  max-width: 800px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  top: 100dvh;
+  transition: all 0.3s ease;
+}
+.upload-page * {
+  color: #16161b;
+}
+
+.upload-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #16161b;
+  padding: 8px;
+  border-radius: 1000px;
+  height: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.upload-back:hover {
+  background-color: red;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.upload-content p {
+  text-align: center;
+}
+.upload-btn {
+  background-color: #16161b;
+  color: white;
+  cursor: pointer;
+  padding: 5px 15px;
+  width: fit-content;
+}
+
+.drag-area {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  user-select: none;
+  pointer-events: none;
+}
+.drag-input {
+  height: calc(100% - 26px);
+  flex: 1;
+  border-radius: 5px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed white;
+  transition: all 0.3s ease;
+}
+.drag-input p {
+  font-size: 20px;
+  color: white;
+  display: none;
+  transition: all 0.3s ease;
+}
+
+.drag-on * {
+  pointer-events: none;
+}
+.drag-over {
+  background-color: #585896;
+  border: 1px solid white;
+}
+.drag-over p {
+  display: block;
+}
+
+.upload-confirm {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+.upload-confirm * {
+  color: white;
+  pointer-events: none;
+}
+.upload-confirm > * {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+.upload-confirm > * > div {
+  flex: 1;
+  gap: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+.confirm-no {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.confirm-no > div {
+  background-color: rgba(255, 0, 0, 0.5);
+  left: 100%;
+}
+
+.confirm-yes {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.confirm-yes > div {
+  background-color: rgba(0, 255, 0, 0.5);
+  right: 100%;
+}
+
+@media screen and (max-width: 750px) {
+  .upload-page {
+    height: 100dvh;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .upload-confirm {
+    flex-direction: column;
+  }
+  .upload-confirm * {
+    border-radius: unset;
+  }
+
+  .confirm-yes > div {
+    right: unset !important;
+    top: -100%;
+  }
+  .confirm-no > div {
+    left: unset !important;
+    bottom: -100%;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  #uploadImage {
+    width: 100dvw;
+  }
+  .upload-page {
+    width: 100dvw;
+  }
+}

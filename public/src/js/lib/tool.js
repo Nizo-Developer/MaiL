@@ -1,4 +1,4 @@
-import { createData, decrypt, encrypt, readData, updateData, letterCount } from "../module/module.mjs";
+import { createData, decrypt, encrypt, letterCount, readData, updateData } from "../module/module.mjs";
 import { loadPage } from "./opg.js";
 
 export function randint(min, max) {
@@ -70,6 +70,7 @@ export async function editMessage(elemen, load) {
   if (!load) {
     const messageId = elemen.target.getAttribute('edit-id');
     localStorage.setItem('id', messageId)
+    localStorage.setItem('edit-mode', 1)
     loadPage(1)
   } else {
     const id = localStorage.getItem('id');
@@ -78,6 +79,7 @@ export async function editMessage(elemen, load) {
     const result = document.querySelector('.result');
     const openlink = document.getElementById('openLink');
     const openBtn = document.getElementById('open');
+    
   
     title.value = decrypt(data.title);
     description.value = decrypt(data.description);
@@ -88,7 +90,7 @@ export async function editMessage(elemen, load) {
     result.src = resultSrc
     openlink.href = resultSrc
     openBtn.removeAttribute('disabled')
-    copyLink.removeAttribute('disabled')
+    shareBtn.removeAttribute('disabled')
   
     titleAct();
     descriptionAct();
@@ -139,7 +141,7 @@ export async function link(event) {
       console.log(openlink);
       openlink.href = resultSrc;
       openBtn.removeAttribute('disabled')
-      copyLink.removeAttribute('disabled')
+      shareBtn.removeAttribute('disabled')
     } else {
       if (!titleVal) {
         label[0].style.color = 'red'
@@ -231,7 +233,8 @@ export function formating(text) {
 }
 
 export function copy() {
-  navigator.clipboard.writeText(result.src)
+  const url = document.querySelector('#copyLink p');
+  navigator.clipboard.writeText(url.textContent)
 }
 
 export function titleAct() {
@@ -263,4 +266,11 @@ export function descriptionAct() {
 function sanitization(input) {
   console.log(DOMPurify.sanitize(input))
   return DOMPurify.sanitize(input)
+}
+
+export function pathtomail() {
+  const reverse = window.location.pathname.split('').reverse()
+  const directory = reverse.slice(reverse.indexOf("/")).reverse().join("");
+
+  return window.location.origin + directory
 }

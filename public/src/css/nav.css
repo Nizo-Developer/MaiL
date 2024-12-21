@@ -45,21 +45,6 @@
   justify-content: flex-end;
   gap: 20px;
 }
-.account {
-  height: fit-content;
-  padding: 3px 15px;
-  color: white;
-  border: 2px solid white;
-  background-color: transparent;
-  font-weight: bold;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 #user {
   height: fit-content;
   padding: 3px 15px;
@@ -75,6 +60,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+#user * {
+  pointer-events: none;
 }
 
 

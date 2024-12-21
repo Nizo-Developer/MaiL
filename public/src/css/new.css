@@ -34,6 +34,17 @@ section {
   display: flex;
   justify-content: end !important;
 }
+#signin {
+  background-color: transparent;
+  border: 2px solid white;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#signin:hover {
+  background-color: #fff;
+  color: #16161b;
+}
 
 .main {
   position: relative;
@@ -51,6 +62,17 @@ section {
   transition: all 1s ease;
 }
 
+.sec-section {
+  width: 100dvw;
+  position: fixed;
+  display: grid;
+  grid-template-columns: 1fr 0;
+  top: 0;
+  z-index: 12;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
 @media screen and (max-width: 540px) {
   section {
     grid-template-columns: none !important;
@@ -66,5 +88,9 @@ section {
 
   .container {
     min-height: calc(100dvh - 60px);
+  }
+
+  .sec-section {
+    grid-template-columns: 100dvw 1fr;
   }
 }

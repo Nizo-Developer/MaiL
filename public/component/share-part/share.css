@@ -1,0 +1,153 @@
+
+#share {
+  position: fixed;
+  z-index: 300;
+  pointer-events: none;
+}
+#share .background {
+  height: 100dvh;
+  width: 100dvw;
+  backdrop-filter: blur(0px);
+  transition: all 0.3s ease;
+}
+
+div[message-id] {
+  display: none;
+}
+
+.row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.share-wrapper {
+  position: fixed;
+  top: 0;
+  height: 100dvh;
+  width: 100dvw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.share-page {
+  background-color: #fff;
+  padding-inline: 20px;
+  height: calc(100dvh - 100px);
+  width: calc(100dvw - 80px);
+  max-width: 800px;
+  border-radius: 8px;
+  display: grid;
+  grid-template-rows: 60px 1fr 60px;
+  pointer-events: all;
+  top: 100dvh;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.share-page * {
+  color: #16161b;
+}
+.share-page > * {
+  width: calc(100vw - 80px);
+  max-width: 800px;
+}
+
+.share-head {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 20px;
+  border-bottom: 1px solid #ababab;
+}
+.share-head label {
+  right: -54px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
+  font-weight: bolder;
+  pointer-events: none;
+}
+.share-head #search {
+  border: none;
+  border-bottom: 2px solid #16161b;
+  background-color: transparent;
+}
+.share-head #search:focus {
+  outline: none;
+}
+.share-head #search:focus ~ label {
+  right: 0;
+}
+.share-head #search:not(:placeholder-shown) ~ label {
+  right: 0;
+}
+.share-head #back {
+  background-color: red;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.share-friend {
+  margin-block: 10px;
+  overflow: auto;
+}
+.share-friend::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+.share-friendlist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-inline: 5px;
+}
+.friend {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-right: 1px solid #ababab;
+  border-left: 1px solid #ababab;
+}
+.friend #name {
+  font-size: 18px;
+  font-weight: bolder;
+}
+.friend #send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.friend #send img {
+  pointer-events: none;
+}
+
+.share-other {
+  border-top: 1px solid #ababab;
+  display: flex;
+}
+.share-other #copyLink {
+  flex: 1;
+  width: 100%;
+  margin-block: 10px;
+  background-color: #e6e6e6;
+  border: 1px solid #ababab;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.share-other p {
+  text-wrap: nowrap;
+  color: #4d4d4d;
+  margin-inline: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 540px) {
+  .share-page {
+    margin-block: 20px;
+  }
+}

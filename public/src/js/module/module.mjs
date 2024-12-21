@@ -119,13 +119,9 @@ export function readData(id) {
           if (data.author != 'anonymous') {
             (async () => {
               try {
-                const auth = await readingToken();
 
-                if (auth) {
-                  resolve(data);
-                } else {
-                  reject('Not allow access')
-                }
+                resolve(data);
+          
               } catch (error) {
                 console.error('Error:', error.message);
               }
@@ -159,7 +155,8 @@ export function readingToken() {
             const data = Object.entries(userToken.val())[0]
             const userData = {
               userId: data[0],
-              username: data[1].username
+              username: data[1].username,
+              photoprofile: data[1]['photo-profile'] ?? './asset/defaultprofile.png'
             }
 
             localStorage.setItem('userId', data[0])
@@ -280,6 +277,26 @@ export function signup(username, password) {
   })
 }
 
+export function newPhotoProfile(img) {
+  return new Promise(async(resolve, reject) => {
+    const check = await readingToken();
+
+    if (!check) {
+      reject()
+    }
+
+    const refUser = ref(database, `account/${check.userId}/photo-profile`);
+    
+    await set(refUser, img)
+      .then(() => {
+        resolve('Data added successfully');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  });
+}
+
 export function wordCount(words) {
   return (
     String(words).split(' ').filter(Boolean).length +
@@ -344,7 +361,6 @@ export function getAllMessage() {
     resolve(response)
   });
 }
-
 
 export function encrypt(text) {
   console.log(text)

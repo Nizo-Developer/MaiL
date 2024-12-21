@@ -254,7 +254,7 @@ section {
   display: flex;
   gap: 5px;
 }
-.link * {
+.link > * {
   flex: 1;
   margin-top: 5px !important;
 }

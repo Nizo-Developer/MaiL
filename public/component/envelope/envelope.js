@@ -2,6 +2,8 @@ import { loadAcc } from "../../src/js/lib/authing.js";
 import { loadPage } from "../../src/js/lib/opg.js";
 import { editMessage } from "../../src/js/lib/tool.js";
 import { checkUser, getAllMessage, readingToken } from "../../src/js/module/module.mjs";
+import { getAllSharedMessage } from "../../src/js/module/share.mjs";
+import { toggleShare } from "../share-part/share.js";
 
 export function envelopeLoad() {
   const style = document.querySelector('#styleOpg');
@@ -14,6 +16,7 @@ export function envelopeLoad() {
   
   main.innerHTML = `
     <div class="acc-container"></div>
+    <div class="sidebar-background"></div>
     <div class="head">
       <div class="top">
         <div class="title">Envelope <span id="count"></span></div>
@@ -65,7 +68,7 @@ export function envelopeLoad() {
     
     const myEnvelope = document.querySelector('.my-envelope .btn');
     const mailing = document.querySelector('.mailing-envelope .btn');
-    const search = document.querySelector('#search');
+    const search = document.querySelector('.search-wrap #search');
     
     window.addEventListener('resize', () => {
       envelopeResponsive(1);
@@ -113,7 +116,7 @@ function check() {
   return false
 }
 
-function nav(type = localStorage.getItem('enId')) {
+async function nav(type = localStorage.getItem('enId')) {
   const page = parseInt(localStorage.getItem('enId'));
   const myEnvelope = document.querySelector('.my-envelope .btn');
   const mailing = document.querySelector('.mailing-envelope .btn');
@@ -124,16 +127,29 @@ function nav(type = localStorage.getItem('enId')) {
   myEnvelope.classList[type == 1 ? 'add' : 'remove']('btn-active');
   mailing.classList[type == 1 ? 'remove' : 'add']('btn-active');
   
-  type == 1 ? loadList() : loadEnvelope();
+  const myData = await getAllMessage();
+  
+  const myCount = document.querySelector('.my-envelope #count');
+  myCount.textContent = String(`( ${myData.sumData} )`);
+  
+  const enData = await getAllSharedMessage();
+
+  const enCount = document.querySelector('.mailing-envelope #count');
+  enCount.textContent = String(`( ${enData.sumData} )`);
+
+  const listWrapper = document.querySelector('.list-wrapper');
+  listWrapper.innerHTML = ''
+  mailLog(undefined, true)
+
+  type == 1 ? loadList(myData) : loadEnvelope(enData);
 }
 
-async function loadList() {
+async function loadList(data) {
   const mailWrapper = document.querySelector('.mail-wrapper');
   mailWrapper.style.removeProperty('flex-direction');
   
   try {
     console.log('yes')
-    const data = await getAllMessage();
     
     if (data && data.sumData > 0) {
       const listWrapper = document.querySelector('.list-wrapper');
@@ -143,12 +159,6 @@ async function loadList() {
       
       const btn = document.createElement('button');
       btn.setAttribute('class', 'btn');
-      
-      const count = document.querySelector('.my-envelope #count');
-
-      const messageLength = Object.keys(data.message).length;
-
-      count.textContent = String(`( ${messageLength} )`);
 
       Object.keys(data.message).forEach((key) => {
         listWrapper.innerHTML += `
@@ -161,6 +171,9 @@ async function loadList() {
               </div>
             </div>
             <div class="button-wrapper">
+              <button class="btn" id="share-list" share-id="${key}">
+                share
+              </button>
               <button class="btn" id="edit-list" edit-id="${key}">
                 edit
               </button>
@@ -183,8 +196,12 @@ async function loadList() {
         descriptionFiller[index].textContent = dataMessage.description
       })
 
-      const editBtn = document.querySelectorAll('button[edit-id]')
+      const shareBtn = document.querySelectorAll('button[share-id]');
+      const editBtn = document.querySelectorAll('button[edit-id]');
 
+      shareBtn.forEach(e => {
+        e.addEventListener('click', toggleShare)
+      })
       editBtn.forEach(e => {
         e.addEventListener('click', editMessage)
       })
@@ -208,9 +225,69 @@ async function loadList() {
   }
 }
 
-function searchEnvelope() {
+async function loadEnvelope(data) {
   const mailWrapper = document.querySelector('.mail-wrapper');
-  const search = document.querySelector('#search');
+  mailWrapper.style.removeProperty('flex-direction');
+  
+  try {
+    if (data && data.sumData > 0) {
+      const listWrapper = document.querySelector('.list-wrapper');
+      
+      listWrapper.innerHTML = '';
+      mailWrapper.style.flexDirection = 'column';
+      
+      const btn = document.createElement('button');
+      btn.setAttribute('class', 'btn');
+
+      Object.keys(data.message).forEach((key) => {
+        listWrapper.innerHTML += `
+          <div class="message">
+            <div class="message-right">
+              <p>#${key}</p>
+              <div class="message-wrapper">
+                <div class="msg listTitle"></div>
+                <div class="msg listDescription"></div>
+              </div>
+            </div>
+            <div class="button-wrapper">
+              <button class="btn" id="view-list">
+                <a href="./Mail.html?id=${key}" target="_blank">view</a>
+              </button>
+            </div>
+            </div>
+        `;
+      })
+      
+
+      const titleFiller = document.querySelectorAll('.listTitle');
+      const descriptionFiller = document.querySelectorAll('.listDescription');
+      
+      Object.keys(data.message).forEach((key, index) => {
+        const dataMessage = data.message[key];
+        
+        titleFiller[index].textContent = dataMessage.title
+        descriptionFiller[index].textContent = dataMessage.description
+      })
+    } else {
+      const validation = await checkUser();
+
+      // You haven't get a single mail :<
+      
+      if (validation) {
+        mailLog("You haven't create a single message yet", false)
+      } else {
+        mailLog("You should Login to use this Feature", false)
+      }
+      envelopeResponsive()
+    }
+  } catch (error) {
+    console.log(error)
+    mailLog(error.message, false)
+  }
+}
+
+function searchEnvelope() {
+  const search = document.querySelector('.search-wrap #search');
   const query = search.value.toLowerCase();
   const items = document.querySelectorAll('.message');
 
