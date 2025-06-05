@@ -62,7 +62,7 @@ body {
   cursor: pointer;
 }
 .page-wrapper > *:first-child {
-  border-right: 1px solid white;
+  border-right: 1px solid #515161;
 }
 .page-wrapper p {
   margin: 0;
@@ -136,7 +136,7 @@ body {
 }
 
 .mail-wrapper {
-  margin: 20px;
+  margin: 20px 10px;
   height: fit-content;
   flex: 1;
   display: flex;
@@ -148,15 +148,15 @@ body {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 20px;
+  gap: 5px;
 }
 
 .message {
-  border-right: 2px solid white;
-  border-left: 2px solid white;
+  border: 1px solid #515161;
+  border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr min-content;
-  padding: 5px 20px;
+  padding: 10px 20px;
   gap: 20px;
   overflow: hidden;
 }
@@ -196,7 +196,8 @@ body {
 }
 .button-wrapper .btn {
   padding: 3px 10px;
-  border: 1px solid white;
+  border: 1px solid #515161;
+  border-radius: 3px;
   background-color: transparent;
   color: white;
   transition: all 0.3s ease;

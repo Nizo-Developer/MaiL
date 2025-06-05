@@ -1,4 +1,5 @@
 import { envelopeLoad } from "../../../component/envelope/envelope.js";
+import { forumLoad } from "../../../component/forum/forum.js";
 import { friendLoad } from "../../../component/friend/friend.js";
 import { mainLoad, preview } from "../../../component/main/main.js";
 import { defineLogout } from "./authing.js";
@@ -12,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('onPage', 1);
   }
   
-  localStorage.removeItem('preview')
-  localStorage.removeItem('loadFriendList')
+  localStorage.removeItem('preview');
+  localStorage.removeItem('loadFriendList');
+  localStorage.removeItem('id');
 
   window.addEventListener('resize', secResponsive);
   
@@ -66,6 +68,8 @@ export function loadPage(id) {
     friendLoad();
   } else if (page == 3) {
     envelopeLoad();
+  } else if (page == 4) {
+    forumLoad();
   }
 
   colorChange("#ffffff")

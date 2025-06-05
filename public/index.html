@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="google-site-verification" content="SOtjO86ZpbVw_A-513qaP_TV-5-olLfve2_fuTfVdBs" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Main Page (one page browser)">
-  <meta name="copyright" content="© 2024 MaiL. All rights reserved.">
+  <meta name="description"
+    content="Send a letter with the impression of sending an envelope to a friend, relative or loved one. ">
+  <meta name="copyright" content="© 2025 Epistura. All rights reserved.">
   <meta name="author" content="nizo5671">
-  <title>MaiL</title>
+  <title>Epistura</title>
   <link rel="preconnect" href="https://www.gstatic.com">
   <link id="styleOpg" rel="stylesheet" href="">
   <link rel="stylesheet" href="./src/css/sidebar.css">
@@ -14,13 +17,15 @@
   <link rel="stylesheet" href="./component/share-part/share.css">
   <link rel="stylesheet" href="./component/profile-part/profile.css">
   <link rel="stylesheet" href="./component/up-image-part/up-image.css">
+  <link rel="stylesheet" href="./component/forum/createForum.css">
   <link rel="stylesheet" href="./src/css/nav.css">
   <link rel="stylesheet" href="./src/css/new.css">
-  <link rel="icon" href="./asset/favico_mf9_icon.ico" type="image/x-icon">
-  <link rel="icon" href="./asset/favico.png" type="image/png">
-  <link rel="icon" href="./asset/favico.svg" type="image/svg+xml">
+  <link rel="icon" href="./asset/favicon/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="./asset/favicon/favicon.png" type="image/png">
+  <link rel="icon" href="./asset/favicon/favicon.svg" type="image/svg+xml">
   <theme content="2"></theme>
 </head>
+
 <body>
   <section>
     <div class="wht-screen"></div>
@@ -46,6 +51,12 @@
           <img src="./asset/envelope.svg" alt="" width="20">
           <div class="hide">
             <p>Envelope</p>
+          </div>
+        </div>
+        <div class="menu" id="forum">
+          <img src="./asset/forum.svg" alt="" width="20">
+          <div class="hide">
+            <p>Forum</p>
           </div>
         </div>
       </div>
@@ -102,6 +113,7 @@
                   <div class="photo-banner"></div>
                   <div class="photo-frame">
                     <img src="./asset/defaultprofile.png" alt="">
+                    <data-img></data-img>
                     <div class="photo-change">
                       <img src="./asset/img.svg" alt="" height="20">
                       <p>
@@ -121,9 +133,9 @@
               </div>
             </div>
             <div class="profile-setting">
-  
+
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -154,6 +166,28 @@
       </div>
     </div>
     <div class="main"></div>
+    <div id="createForum">
+      <div class="background"></div>
+      <div class="panel">
+        <form>
+          <div class="input-wrapper">
+            <input name="forumTitle" id="forumTitle" placeholder=" ">
+            <label for="forumTitle">Forum Title</label>
+          </div>
+          <fieldset class="forum-type">
+            <legend class="title">Forum Type :</legend>
+            <select class="radio-wrapper" id="forumType">
+              <option class="radio-item">
+                <div class="icon-question"></div>
+                <span>Question</span>
+                <div class="item-background"></div>
+              </option>
+            </select>
+          </fieldset>
+          <button id="createForumBtn">Create</button>
+        </form>
+      </div>
+    </div>
   </section>
   <script id="scriptOpg" type="module" src=""></script>
   <script type="module" src="./src/js/lib/sidebar.js"></script>
@@ -161,6 +195,8 @@
   <script type="module" src="./component/profile-part/profile.js"></script>
   <script type="module" src="./component/up-image-part/up-image.js"></script>
   <script type="module" src="./src/js/lib/opg.js"></script>
+  <script type="module" src="./src/js/module/IndexdbHandler.mjs"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
 </body>
+
 </html>

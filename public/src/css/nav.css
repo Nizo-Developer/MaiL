@@ -73,7 +73,6 @@
   background-color: red;
   color: white;
   height: 20px;
-  width: 0;
   transition: all 0.3s ease;
   overflow: hidden;
   cursor: pointer;
@@ -84,7 +83,7 @@
 .acc-container #userWrap {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  margin: 30px 20px;
 }
 .acc-container #userWrap:hover > #logout {
   width: 20px;
@@ -112,13 +111,25 @@
   color: white;
 }
 .line {
-  height: 2px;
+  height: 1px;
   background-color: white;
   transition: all 0.3s ease;
   width: 0%;
 }
 .menu-wrapper > div:hover .line {
   width: 120%;
+}
+
+@media (pointer: coarse) {
+  #logout {
+    width: 20px;
+  }
+}
+
+@media (pointer: fine) {
+  #logout {
+    width: 0;
+  }
 }
 
 @media screen and (max-width: 920px) {

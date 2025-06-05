@@ -1,21 +1,33 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+import { getPicture, postPicture } from "./storage.mjs";
+
+// const firebaseConfig = {
+//   apiKey: window.API_TOKEN,
+//   authDomain: "mail-ea223.firebaseapp.com",
+//   databaseURL: "https://mail-ea223-default-rtdb.asia-southeast1.firebasedatabase.app",
+//   projectId: "mail-ea223",
+//   storageBucket: "mail-ea223.appspot.com",
+//   messagingSenderId: "720207516334",
+//   appId: "1:720207516334:web:34db9e14d94b57939c533f",
+//   measurementId: "G-E7G44M30EV"
+// };
 
 const firebaseConfig = {
   apiKey: window.API_TOKEN,
-  authDomain: "mail-ea223.firebaseapp.com",
-  databaseURL: "https://mail-ea223-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "mail-ea223",
-  storageBucket: "mail-ea223.appspot.com",
-  messagingSenderId: "720207516334",
-  appId: "1:720207516334:web:34db9e14d94b57939c533f",
-  measurementId: "G-E7G44M30EV"
+  authDomain: "epistura-b75d5.firebaseapp.com",
+  databaseURL: "https://epistura-b75d5-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "epistura-b75d5",
+  storageBucket: "epistura-b75d5.firebasestorage.app",
+  messagingSenderId: "936418042824",
+  appId: "1:936418042824:web:af7bc8e5eb45968a7456fd",
+  measurementId: "G-BJFLM128GE"
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const database = getDatabase(app);
 
-async function setupConfig(path = './') {
+export async function setupConfig(path = './') {
   let config = {};
   const messageId = getMessageId();
   const response = await fetch(`${path}src/js/lib/setting.json`);
@@ -39,8 +51,9 @@ async function setupConfig(path = './') {
   return config
 }
 
-export function createData(title, description, ) {
+export function createData(title, description, pictures) {
   return new Promise((resolve, reject) => {
+    console.log(pictures)
     
     async function getUser() {
       const config = await setupConfig();
@@ -52,34 +65,41 @@ export function createData(title, description, ) {
       const refSet = ref(database, `message/${message_id}`);
       console.log(config)
       const now = timeNow();
+      
+      try {
+        let uniqueKey = null;
+        if (pictures !== null) {
+          const messageRef = ref(database, `pictures/`);
+          const messagePush = push(messageRef);
+          uniqueKey = messagePush.key;
 
-
-      set(refSet, {
-        title: title,
-        description: description,
-        author: user ? localStorage.getItem('userId') : 'anonymous',
-        config: config,
-        timestamp: {
-          create_at: now,
-          update_at: ""
+          postPicture(uniqueKey, pictures);
         }
-      },)
-      .then(() => {
-        console.log('Data saved successfully.');
-        localStorage.setItem('id', message_id)
+
+        await set(refSet, {
+          title: title,
+          description: description,
+          pictures: uniqueKey,
+          author: user ? localStorage.getItem('userId') : 'anonymous',
+          config: config,
+          timestamp: {
+            create_at: now,
+            update_at: ""
+          }
+        })
+
         resolve(message_id);
-      })
-      .catch((error) => {
+      } catch (error)  {
         console.error('Error saving data: ', error);
         reject(error);
-      });
+      };
     }
 
     getUser()
   });
 }
 
-export function updateData(id, title, description) {
+export function updateData(id, title, description, pictures) {
   return new Promise(async(resolve, reject) => {
     const config = await setupConfig();
     const message_id = id;
@@ -90,6 +110,7 @@ export function updateData(id, title, description) {
     update(newMessageRef, {
       title: title,
       description: description,
+      pictures: pictures,
       config: config,
       'timestamp/update_at': now
     })
@@ -105,38 +126,82 @@ export function updateData(id, title, description) {
 }
 
 export function readData(id) {
-  return new Promise((resolve, reject) => {
-    const dataRef = ref(database, `message/${id}`);
+  return new Promise(async(resolve, reject) => {
+    const getData = await get(ref(database, `message/${id}`));
+    const result = getData.val()
+    // const authorGet = await get(ref(database, `message/${id}/author`))
+    // const titleGet = await get(ref(database, `message/${id}/title`))
+    // const descriptionGet = await get(ref(database, `message/${id}/description`))
+    // const configGet = await get(ref(database, `message/${id}/config`))
 
-    console.log(id)
+    // const author = authorGet.val();
+    // const title = titleGet.val();
+    // const description = descriptionGet.val();
+    // const config = configGet.val();
+    const pictures = await getPicture(result.pictures);
 
-    get(dataRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          console.log(data)
+    const data = {
+      author: result.author,
+      title: result.title,
+      description: result.description,
+      config: result.config,
+      pictures: pictures
+    }
 
-          if (data.author != 'anonymous') {
-            (async () => {
-              try {
+    resolve(data)
 
-                resolve(data);
+    // get(dataRef)
+    //   .then((snapshot) => {
+    //     if (snapshot.exists()) {
+    //       const data = snapshot.val();
+    //       console.log(data)
+
+    //       if (data.author != 'anonymous') {
+    //         (async () => {
+    //           try {
+
+    //             resolve(data);
           
-              } catch (error) {
-                console.error('Error:', error.message);
-              }
-            })();
-          } else {
-            resolve(data);
-          }
-        } else {
-          throw new Error("Data not found");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        reject(error);
-      });
+    //           } catch (error) {
+    //             console.error('Error:', error.message);
+    //           }
+    //         })();
+    //       } else {
+    //         resolve(data);
+    //       }
+    //     } else {
+    //       throw new Error("Data not found");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching data:", error);
+    //     reject(error);
+    //   });
+  });
+}
+
+export function getPictures(id) {
+  return new Promise(async(resolve, reject) => {
+    let index = 0;
+    let getImage = true
+    let pictures = []
+
+    const key = await get(ref(database, 'message/' + id + '/pictures'));
+    const keyVal = key.val();
+
+    while (getImage) {
+      console.log(index)
+      const pictureGet = await get(ref(database, `pictures/${keyVal}/${index}`))
+
+      if (pictureGet.exists()) {
+        pictures.push(pictureGet.val());
+      } else {
+        getImage = false
+      }
+      index++
+    }
+
+    resolve(pictures)
   });
 }
 
@@ -338,6 +403,8 @@ export function getAllMessage() {
 
     const getUserMessage = await get(userMessage);
     const data = getUserMessage.val();
+    delete data.pictures
+
     const keys = data ? Object.keys(data) : '';
     const dataLength = data ? keys.length : 0;
     let list = {}
@@ -362,16 +429,39 @@ export function getAllMessage() {
   });
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function encrypt(text) {
   console.log(text)
   var unicode = Array.from(text).map(ord => ord.codePointAt(0));
   return unicode.map(hex => hex.toString(16)).join('g')
 }
-window.de = decrypt
-export function decrypt(text) {
-  var ununicode = text.split('g').map(uni => String.fromCodePoint(parseInt(uni, 16)));
 
-  return ununicode.join('');
+export function decrypt(text) {
+  var ununicode = text.split('g').map(uni => {
+    const ununi = String.fromCodePoint(parseInt(uni, 16));
+
+    if (ununi == '\n') {
+      return "<br>"
+    } else {
+      return ununi
+    }
+  });
+
+  return ununicode.join('').split('<br>');
 }
 
 export function checkUser() {
@@ -386,7 +476,6 @@ export function checkUser() {
         .then((snapshot) => {
           if (snapshot.exists()) {
             const dataUser = snapshot.val();
-            console.log(dataUser.username)
     
             if (localStorage.getItem('token') == dataUser.token) {
               resolve({
@@ -454,5 +543,3 @@ export function timeNow() {
   const now = new Date();
   return now.toLocaleString();
 }
-
-// window.cek = readingToken()

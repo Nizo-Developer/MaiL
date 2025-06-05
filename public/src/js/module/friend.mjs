@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo, remove } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo, remove } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 import { database, getIdByUsername, timeNow, readingToken } from "./module.mjs";
 
 export function acceptFriend(username) {
@@ -179,9 +179,11 @@ export function getAllFriend(userId = localStorage.getItem('userId'), type = 1) 
         
         const promise = get(refAccount).then((userData) => {
           const userDataValue = userData.val();
+          console.log(userDataValue)
 
           list[index] = {
             username: userDataValue.username,
+            photoprofile: userDataValue['photo-profile'] ?? './asset/defaultprofile.png',
             status: user.status,
           };
         });

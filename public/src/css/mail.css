@@ -1,0 +1,293 @@
+@font-face {
+  font-family: 'Gloria';
+  src: url(../../asset/font/GloriaHallelujah.ttf);
+}
+
+* {
+  font-family: 'Gloria';
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  margin: 10px;
+  background-color: #353541;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(212, 30, 30);
+}
+*::-webkit-scrollbar-track:horizontal, *::-webkit-scrollbar-thumb:horizontal {
+  border-radius: 1000px 1000px 0 0;
+}
+*::-webkit-scrollbar-track:vertical, *::-webkit-scrollbar-thumb:vertical {
+  border-radius: 1000px 0 0 1000px;
+}
+
+body {
+  background-color: #fff;
+  margin: 0;
+}
+
+section {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.loading-page {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100dvw;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity 1.5s ease;
+}
+.loading-icon {
+  position: relative;
+  transform: rotate(0deg);
+  transition: transform 2s ease;
+  animation: loading 3s infinite;
+  height: fit-content;
+}
+.loading-icon img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.loading-page p {
+  transform: translateY(60px);
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  33% {
+    transform: rotate(-480deg);
+  }
+  66% {
+    transform: rotate(-960deg);
+  }
+  100% {
+    transform: rotate(-1440deg);
+  }
+}
+
+.page {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.envelope-wrapper {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  width: 100dvw;
+}
+.envelope {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: inherit;
+  width: calc(100dvw - 40px);
+  max-width: 700px;
+  aspect-ratio: 16 / 10.5;
+  bottom: clamp(-80px, -8vw, 0px);
+  transition: all 0.3s ease;
+}
+.envelope:hover {
+  bottom: -5dvw;
+}
+
+.background, .envelope-top, .envelope-bottom, .envelope-button {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: -10;
+}
+.envelope-top, .envelope-button {
+  top: -45%;
+  display: flex;
+  transform: rotateX(0);
+  transition: transform 0.8s linear, top 1.6s linear;
+}
+.envelope-bottom, .background {
+  top: unset;
+  bottom: 0;
+}
+
+.background img, .envelope-bottom img, .envelope-top img, .envelope-button img {
+  width: 100%;
+}
+.envelope-top img, .envelope-button img {
+  position: relative;
+  top: 45%;
+}
+.envelope-button {
+  cursor: pointer;
+}
+
+.envelope-top {
+  z-index: 2;
+}
+.envelope-button {
+  z-index: 3;
+}
+.envelope-bottom {
+  z-index: 1;
+}
+
+.mail-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  aspect-ratio: 16 / 10.5;
+  transform: scale(0.8);
+  width: calc(100dvw - 100px);
+  overflow: hidden;
+  max-width: 600px;
+  transition: all 0.3s ease;
+}
+
+.pictures {
+  backdrop-filter: blur(0);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 10.5;
+  transform: scale(0.8);
+  width: calc(100dvw - 100px);
+  max-width: 600px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.pictures-back {
+  display: none;
+  position: fixed;
+  top: 0;
+  width: 100dvw;
+  color: #16161b;
+  z-index: 2;
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+  cursor: pointer;
+}
+.pictures-wrapper {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  transition: all 1s ease;
+}
+.pictures-scroll {
+  display: flex;
+  position: absolute;
+  transition: all 1s ease;
+}
+.picture {
+  max-height: 400px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #16161b00;
+  color: #16161b;
+  transition: background-color 0.3s ease, transform 0.8s ease,top 1s ease, max-height 3s ease, max-width 3s ease, height 3s ease, width 3s ease;
+}
+.picture:nth-child(2) {
+  z-index: 2;
+}
+.picture > img {
+  max-height: 400px;
+  max-width: 100%;
+  position: fixed;
+  box-shadow: 0 0 25px 5px #16161b;
+}
+.picture > p {
+  align-self: center;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: 10px;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+.container .content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: fit-content;
+  margin-block: 35px;
+  transform: scale(0.5);
+  transition: transform 0.8s ease;
+}
+.container .content * {
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+#title {
+  font-weight: bold;
+  font-size: clamp(6px, 10vw, 30px);
+}
+#title b {
+  font-size: clamp(8px, 10.5vw, 35px);
+}
+#description {
+  font-size: clamp(2px, 5vw, 16px);
+}
+#author {
+  font-weight: bold;
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0 0 10px 15px;
+}
+
+.picture-btn {
+  position: fixed;
+  bottom: 0;
+  right: -100px;
+  height: fit-content;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  margin-bottom: 6px;
+  margin-right: 20px;
+}
+
+@media screen and (min-width: 600px) {
+  .content {
+    margin-inline: 25px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .pictures-scroll {
+    gap: 20px;
+  }
+}

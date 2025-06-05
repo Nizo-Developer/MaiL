@@ -119,7 +119,7 @@ function newInterface() {
   newThing.style.bottom = '-250vh';
   localStorage.setItem('neww', 1);
   setTimeout(() => {
-    window.location.href = './newinterface.html'
+    window.location.href = './'
   }, 800);
 }
 

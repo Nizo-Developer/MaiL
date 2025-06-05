@@ -116,7 +116,7 @@ function check() {
   return false
 }
 
-async function nav(type = localStorage.getItem('enId')) {
+export async function nav(type = localStorage.getItem('enId')) {
   const page = parseInt(localStorage.getItem('enId'));
   const myEnvelope = document.querySelector('.my-envelope .btn');
   const mailing = document.querySelector('.mailing-envelope .btn');
@@ -142,6 +142,8 @@ async function nav(type = localStorage.getItem('enId')) {
   mailLog(undefined, true)
 
   type == 1 ? loadList(myData) : loadEnvelope(enData);
+
+  searchEnvelope();
 }
 
 async function loadList(data) {
@@ -286,7 +288,7 @@ async function loadEnvelope(data) {
   }
 }
 
-function searchEnvelope() {
+export function searchEnvelope() {
   const search = document.querySelector('.search-wrap #search');
   const query = search.value.toLowerCase();
   const items = document.querySelectorAll('.message');

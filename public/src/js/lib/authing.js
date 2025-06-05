@@ -50,8 +50,9 @@ export async function loadAcc(path = './') {
   const signin = document.getElementById('signin');
   const profile = document.querySelector('#user');
   const photoProfile = document.querySelector('.photo-frame > img').src;
+  const dataImg = document.querySelector('data-img');
 
-  localStorage.setItem('pp', photoProfile)
+  dataImg.setAttribute('value', photoProfile);
 
   if (signin) {
     console.log('h')

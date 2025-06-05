@@ -3,111 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mail</title>
-  <link rel="icon" href="./asset/favico_mf9_icon.ico" type="image/x-icon">
-  <link rel="icon" href="./asset/favico.png" type="image/png">
-  <link rel="icon" href="./asset/favico.svg" type="image/svg+xml">
-  <style>
-    * {
-      font-family: 'Times New Roman', Times, serif;
-    }
-
-    body {
-      background-color: #fff;
-      margin: 0;
-    }
-
-    .container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding-inline: 50px;
-      
-      .content {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        height: fit-content;
-        margin-block: 35px;
-
-        * {
-          text-align: center;
-          overflow-wrap: break-word;
-          word-break: break-word;
-        }
-      }
-    }
-
-    #title {
-      font-weight: bold;
-      font-size: 30px;
-
-      b {
-        font-size: 35px;
-      }
-    }
-
-    #description {
-      font-size: 16px;
-    }
-
-    #author {
-      font-weight: bold;
-      font-size: 12px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      margin: 0 0 10px 15px;
-    }
-  </style>
+  <title>Epistura</title>
+  <link rel="icon" href="./asset/favicon/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="./asset/favicon/favicon.png" type="image/png">
+  <link rel="icon" href="./asset/favicon/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./src/css/mail.css">
 </head>
 <body>
-  <div id="author"></div>
-  <div class="container">
-    <div class="content">
-      <div id="title"></div>
-      <div id="description"></div>
+  <section>
+    <div class="loading-page">
+      <div class="loading-icon">
+        <img src="./asset/loading.svg" alt="" height="50">
+      </div>
+      <p>Load content...</p>
     </div>
-  </div>
+    <div class="page">
+      <div class="envelope-wrapper">
+        <div class="envelope">
+          <div class="envelope-top">
+            <img src="./asset/envelop/head.png" alt="">
+        </div>
+        <div class="envelope-button">
+          <img src="./asset/envelop/button.png" alt="">
+        </div>
+        <div class="envelope-bottom">
+          <img src="./asset/envelop/body.png" alt="">
+        </div>
+        <div class="mail-content">
+          <div id="author"></div>
+          <div class="container">
+            <div class="content">
+              <div id="title"></div>
+              <div id="description"></div>
+            </div>
+          </div>
+        </div>
+        <div class="pictures">
+          <div class="pictures-back">
+            <div class="back-btn">
+              <img src="./asset/arrowback-black.svg" alt="" height="18">
+              <p>See Message</p>
+            </div>
+          </div>
+          <div class="pictures-wrapper">
+            <div class="pictures-scroll">
 
-  <script type="module">
-    import { readData, getAuthor, decrypt } from './src/js/module/module.mjs'
+            </div>
+          </div>
+        </div>
+        <div class="background">
+          <img src="./asset/envelop/background.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="picture-btn">
+      <img src="./asset/picture-btn.svg" alt="" height="20">
+    </div>
+  </section>
 
-    const url = window.location.search
-    var param = url.replace(/&amp;/g, '&').replace(/%20/g, ' ').slice(1).split('&')
-    var params = {}
-    
-    const title = document.getElementById('title');
-    const description = document.getElementById('description');
-    const author = document.getElementById('author');
-    
-    var x;
-    param.map(i => {
-      x = i.split('=')
-      params[x[0]] = x[1]
-    })
-    console.log(params);
-    (async () => {
-      try {
-        const data = await readData(params['id']);
-        console.log(data)
-        const config = data.config
-        console.log(config.display_author)
-        
-        title.textContent = decrypt(data['title'])
-        description.textContent = decrypt(data['description'])
-        const displayName = await getAuthor(data.author);
-        if (config.display_author) {
-          author.textContent = '~ ' + (data.author != 'anonymous' ? displayName : 'anonymous');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    })();
-
-    
-  </script>
+  <script type="module" src="./src/js/lib/mail.js"></script>
 </body>
 </html>

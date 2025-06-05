@@ -11,8 +11,8 @@
   background-color: #16162b;
   display: flex;
   border-radius: 0 0 0 15px;
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
+  border-left: 1px solid #515161;
+  border-bottom: 1px solid #515161;
   transition: all 0.3s ease;
   pointer-events: all;
 }

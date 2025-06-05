@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo, remove, child } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+import { getDatabase, ref, set, get, update, push, query, orderByChild, equalTo, remove, child } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 import { database, getIdByUsername, timeNow, readingToken, decrypt } from "./module.mjs";
 
 export function shareMessage(id, user) {

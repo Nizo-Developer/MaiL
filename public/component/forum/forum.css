@@ -1,0 +1,178 @@
+.container {
+  min-height: unset !important;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-inline: 20px;
+}
+
+.acc-container {
+  position: static !important;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.action {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  border: 2px solid #515161;
+  color: white;
+  padding: 3px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #16161b;
+  transition: all 0.3s ease;
+}
+.action:hover {
+  background-color: rgba(255, 255, 255, 0.177);
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.input-wrapper > input {
+  border: none;
+  border-bottom: 1px solid white;
+  padding-bottom: 5px;
+  background-color: transparent;
+  outline: none;
+  padding-top: 20px;
+  font-size: 1px;
+  transition: all 0.3s ease;
+}
+.input-wrapper > input:not(:placeholder-shown) {
+  font-size: 16px;
+}
+.input-wrapper > input:focus ~ label {
+  margin-bottom: -10px;
+}
+.input-wrapper > label {
+  width: fit-content;
+  margin-top: 8px;
+  font-size: 30px;
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
+  margin-bottom: -30px;
+  pointer-events: none;
+  user-select: none;
+}
+.input-wrapper > input:not(:placeholder-shown) ~ label {
+  color: lime;
+  margin-bottom: -10px;
+  font-size: 36px;
+}
+
+form button {
+  background-color: transparent;
+  outline: none;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100px;
+  align-self: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+form button:hover {
+  background-color: white;
+  color: #16161b;
+}
+
+.forum-type {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 4px;
+  border: 1px solid white;
+}
+.title {
+  font-size: 20px;
+  padding-inline: 5px;
+}
+
+.radio-wrapper {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.radio-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  outline: 1px solid white;
+  outline-offset: 3px;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 10px 20px;
+  gap: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  width: fit-content;
+  position: relative;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+.radio-item > * {
+  z-index: 2;
+}
+.radio-item input {
+  display: none;
+}
+.radio-item input[type="radio"]:checked ~ .item-background {
+  background-color: white;
+}
+.radio-item input[type="radio"]:checked ~ .icon-question {
+  background-color: #16161b;
+}
+.radio-item input[type="radio"]:checked ~ span {
+  color: #16161b;
+}
+
+.icon-question {
+  background-color: white;
+  mask: url(../../asset/question.svg) no-repeat center;
+  -webkit-mask: url(../../asset/question.svg) no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  height: 20px;
+  width: 20px;
+  transition: all 0.3s ease;
+}
+
+span {
+  transition: all 0.3s ease;
+}
+
+.item-background {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  z-index: 1;
+}

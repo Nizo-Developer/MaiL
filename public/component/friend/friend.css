@@ -35,20 +35,40 @@ body {
 }
 
 .friend-list {
-  margin: 20px;
+  margin: 20px 10px;
   display: grid;
   justify-items: center;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
+  gap: 5px;
 }
 
 .friend {
-  border: 1px solid white;
+  border: 1px solid #515161;
+  border-radius: 8px;
   padding: 5px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: -webkit-fill-available;
+}
+.friend * {
+  border-color: #515161 !important;
+}
+
+.friend-profile {
+  display: flex;
+  align-items: center;
+  margin: 10px 10px;
+}
+.friend-profile .frame {
+  overflow: hidden;
+  border-radius: 1000px;
+  max-width: 60px;
+  width: 20%;
+  aspect-ratio: 1 / 1;
+}
+.friend-profile .frame img {
+  height: 100%;
 }
 
 .option {
@@ -58,7 +78,7 @@ body {
 
 .friend #name {
   padding-block: 10px;
-  font-size: 50px;
+  font-size: 24px;
   font-weight: bold;
   margin-left: 10px;
   overflow: hidden;
@@ -67,6 +87,7 @@ body {
 
 .option > * {
   padding-block: 8px;
+  font-size: 12px;
   flex: 1;
   display: flex;
   align-items: center;
@@ -159,8 +180,8 @@ input:not(:placeholder-shown) ~ label {
 }
 
 .friend-ongoing  {
-  border-right: 1px solid white;
-  border-left: 1px solid white;
+  border-right: 1px solid #515161;
+  border-left: 1px solid #515161;
 }
 
 .btn {

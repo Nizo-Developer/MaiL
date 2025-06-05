@@ -19,4 +19,4 @@ jobs:
       - name: Print API Token (For Testing Only)
         env:
           API_TOKEN: ${{ secrets.API_TOKEN }}
-        run: echo "Token saat ini adalah $API_TOKEN"  
+        run: echo "$API_TOKEN"  

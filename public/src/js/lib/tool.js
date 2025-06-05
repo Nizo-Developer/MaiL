@@ -1,4 +1,5 @@
 import { createData, decrypt, encrypt, letterCount, readData, updateData } from "../module/module.mjs";
+import { postMessage } from "../module/storage.mjs";
 import { loadPage } from "./opg.js";
 
 export function randint(min, max) {
@@ -80,7 +81,6 @@ export async function editMessage(elemen, load) {
     const openlink = document.getElementById('openLink');
     const openBtn = document.getElementById('open');
     
-  
     title.value = decrypt(data.title);
     description.value = decrypt(data.description);
     edit.style.display = 'block'
@@ -105,6 +105,9 @@ export async function link(event) {
   const openlink = document.getElementById('openLink');
   const openBtn = document.getElementById('open');
 
+  const picture = document.querySelectorAll('img[data-p]');
+  const caption = document.querySelectorAll('#comment');
+
   const id = event.submitter.id[0] == 'g' ? 0 : (event.submitter.id[0] == 'e' ? 1 : null) 
 
   const iframe = document.querySelector('iframe')
@@ -114,23 +117,36 @@ export async function link(event) {
   const titleVal = sanitization(title.value);
   const descriptionVal = sanitization(description.value);
 
+  let pictCaptions = null;
+  if (picture.length > 0) {
+    const pictSrc = Array.from(picture).map(p => p.src);
+
+    pictCaptions = Array.from(caption).map((c, i) => [
+      pictSrc[i],
+      encrypt(sanitization(c.value))
+    ]);
+  }
+
   try {
-    
     if (titleVal && descriptionVal) {
       console.log(formating(titleVal))
       var message_id = await (id == 0 ?
-        createData(
+        postMessage(
           encrypt(formating(titleVal)), 
-          encrypt(formating(descriptionVal))
+          encrypt(formating(descriptionVal)),
+          pictCaptions
         ) : ( id == 1 ?
         updateData(
           localStorage.getItem('id'),
           encrypt(formating(titleVal)), 
-          encrypt(formating(descriptionVal))
+          encrypt(formating(descriptionVal)),
+          pictCaptions
         ) : null
       ))
       console.log(message_id)
       
+      
+
       if (localStorage.getItem('id')) {
         edit.style.display = 'block'
       }
@@ -163,61 +179,61 @@ export async function link(event) {
 }
 
 export function selectionFormating() {
-  var focused;
-  var selected = window.getSelection();
-  var selectionText = selected.toString();
-  var enableFormating = true;
+  // var focused;
+  // var selected = window.getSelection();
+  // var selectionText = selected.toString();
+  // var enableFormating = true;
 
-  var keyBtn = ['b', 'i', 's', 'p']
-  var keyIndi = ['*', '_', '-', '```']
+  // var keyBtn = ['b', 'i', 's', 'p']
+  // var keyIndi = ['*', '_', '-', '```']
 
-  // console.log(selectionText)
+  // // console.log(selectionText)
 
-  title.addEventListener('click', () => {
-    focused = 1
-  });
-  description.addEventListener('click', () => {
-    focused = 2
-  });
-  var tag = focused == 1 ? title : description
-  var indexStart = tag.selectionStart
+  // title.addEventListener('click', () => {
+  //   focused = 1
+  // });
+  // description.addEventListener('click', () => {
+  //   focused = 2
+  // });
+  // var tag = focused == 1 ? title : description
+  // var indexStart = tag.selectionStart
   
-  if (selectionText && enableFormating) {
-    console.log('hi')
-    enableFormating = false
+  // if (selectionText && enableFormating) {
+  //   console.log('hi')
+  //   enableFormating = false
 
-    document.addEventListener('keydown', fm)
+  //   document.addEventListener('keydown', fm)
 
-    function fm(event)  {
-      console.log(event.key)
-      console.log(selectionText)
-      var indi = event.key in keyBtn ? keyIndi[keyBtn.indexOf(event.key)] : ''
+  //   function fm(event)  {
+  //     console.log(event.key)
+  //     console.log(selectionText)
+  //     var indi = event.key in keyBtn ? keyIndi[keyBtn.indexOf(event.key)] : ''
 
-      console.log(event.ctrlKey, event.key in keyBtn)
-      console.log(focused)
-      console.log(event.ctrlKey && event.key in keyBtn && focused)
+  //     console.log(event.ctrlKey, event.key in keyBtn)
+  //     console.log(focused)
+  //     console.log(event.ctrlKey && event.key in keyBtn && focused)
 
-      if (event.ctrlKey && event.key in keyBtn && focused) {
+  //     if (event.ctrlKey && event.key in keyBtn && focused) {
         
-        console.log(indexStart)
-        console.log(tag)
-        console.log(tag.value)
-        var spesificRegex = new RegExp(`^.{${indexStart}}(.{${selectionText.length}})`, 'g')
-        console.log(tag.value.match(spesificRegex))
-        console.log(spesificRegex)
-        console.log(selectionText)
+  //       console.log(indexStart)
+  //       console.log(tag)
+  //       console.log(tag.value)
+  //       var spesificRegex = new RegExp(`^.{${indexStart}}(.{${selectionText.length}})`, 'g')
+  //       console.log(tag.value.match(spesificRegex))
+  //       console.log(spesificRegex)
+  //       console.log(selectionText)
 
         
 
-        tag.value = tag.value.replace(spesificRegex, `${indi}${tag.value.match(spesificRegex)}${indi}`)
+  //       tag.value = tag.value.replace(spesificRegex, `${indi}${tag.value.match(spesificRegex)}${indi}`)
         
-      }
+  //     }
       
-      if (indi) {
-        document.removeEventListener('keydown', fm)      
-      }
-    }
-  }
+  //     if (indi) {
+  //       document.removeEventListener('keydown', fm)      
+  //     }
+  //   }
+  // }
 }
 
 export function formating(text) {

@@ -69,6 +69,9 @@ function toggleSidebar(e, type) {
   envelope.addEventListener('click', () => {
     loadPage(3);
   });
+  forum.addEventListener('click', () => {
+    loadPage(4);
+  });
 
 
   function wideSide() {
@@ -112,8 +115,6 @@ export async function colorChange(color) {
   menuText.forEach(e => {
     e.style.color = color;
   })
-  sidebar.style.borderColor = color;
-  
 
   svg.forEach(e => {
     const url = e.attributes[0].value;

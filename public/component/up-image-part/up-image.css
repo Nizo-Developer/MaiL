@@ -22,7 +22,7 @@
   justify-content: center;
   pointer-events: all;
   top: 100dvh;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 .upload-page * {
   color: #16161b;

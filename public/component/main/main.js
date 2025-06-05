@@ -3,6 +3,7 @@ import { loadPage } from "../../src/js/lib/opg.js";
 import { colorChange } from "../../src/js/lib/sidebar.js";
 import { changeMonoSvg, copy, descriptionAct, editMessage, link, mode, selectionFormating, titleAct } from "../../src/js/lib/tool.js";
 import { toggleShare } from "../share-part/share.js";
+import { arrowView, toggleUpload } from "../up-image-part/up-image.js";
 
 export function mainLoad() {
   const style = document.querySelector('#styleOpg');
@@ -35,14 +36,27 @@ export function mainLoad() {
           <button id="generate" type="submit">Generate</button>
           <button id="edit" type="submit">Edit</button>
         </div>
-        <textarea name="" id="description" placeholder=" "></textarea>
+        <textarea name="description" id="description" placeholder=" "></textarea>
         <label for="description" class="label2">Description
           <span id="cdescription" class="counter"></span>
         </label>
-        <input type="text" id="title" placeholder=" ">
+        <input type="text" name="title" id="title" placeholder=" ">
         <label for="title" class="label1">Title
           <span id="ctitle" class="counter"></span>
         </label>
+        <div class="picture-wrapper">
+          <div class="picture-preview">
+            <div class="picture-container">
+            </div>
+          </div>
+          <div class="picture-upload">
+            <img src="./asset/camera.svg" alt="upload-picture" width="22">
+          </div>
+          <div class="picture-arrow">
+            <div class="arrowl"><img src="./asset/arrowl.svg"></div>
+            <div class="arrowr"><img src="./asset/arrowr.svg"></div>
+          </div>
+        </div>
       </form>
     </div>
   `;
@@ -64,6 +78,11 @@ export function mainLoad() {
   const description = document.getElementById('description');
   const share = document.querySelector('#shareBtn')
   const form = document.querySelector('.form');
+  const picture = document.querySelector('.picture-upload img');
+  
+  const arrowl = document.querySelector('.arrowl');
+  const arrowr = document.querySelector('.arrowr');
+
 
   form.addEventListener('submit', link);
   share.addEventListener('click', () => {
@@ -73,6 +92,17 @@ export function mainLoad() {
   previewBtn.addEventListener('click', preview);
   title.addEventListener('input', titleAct)
   description.addEventListener('input', descriptionAct);
+  picture.addEventListener('click', () => {
+    toggleUpload(undefined, 2)
+  })
+
+  arrowl.addEventListener('click', () => {
+    arrowView(1)
+  })
+  arrowr.addEventListener('click', () => {
+    arrowView(2)
+  })
+
   window.addEventListener('resize', responsive);
   window.addEventListener('mousemove', responsive);
   responsive();
@@ -107,7 +137,6 @@ export function responsive() {
   previewWrap.style.width = main.getBoundingClientRect().width + 'px';
   
   if (localStorage.getItem('preview')) {
-    preview.style.height = `calc(100dvh - ${mode() ? '175.5px' : '115.5px'} - 4px)`;
     preview.style.bottom = mode() ? '95.5px' : '35.5px';
     button.style.top = `calc(100dvh - ${mode() ? '85px' : '25px'})`;
   }

@@ -101,25 +101,25 @@ div[message-id] {
   gap: 10px;
   margin-inline: 5px;
 }
-.friend {
+.share-friendlist .friend {
   display: flex;
   justify-content: space-between;
   padding: 5px 10px;
   border-right: 1px solid #ababab;
   border-left: 1px solid #ababab;
 }
-.friend #name {
+.share-friendlist .friend #name {
   font-size: 18px;
   font-weight: bolder;
 }
-.friend #send {
+.share-friendlist .friend #send {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
   cursor: pointer;
 }
-.friend #send img {
+.share-friendlist .friend #send img {
   pointer-events: none;
 }
 

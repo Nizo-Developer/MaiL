@@ -234,7 +234,12 @@ async function loadList() {
       userData.forEach((user, index) => {
         friendList.innerHTML += `
         <div class="friend">
-          <div id="name" name-id="${index}">${user.username}</div>
+          <div class="friend-profile">
+            <div class="frame">
+              <img src="${user.photoprofile}">
+            </div>
+            <div id="name" name-id="${index}">${user.username}</div>
+          </div>
           <div class="option">
             <div id="unfriend" x-data="${index}">
               <img src="./asset/unfriend.svg" alt="unfriend" height="15">

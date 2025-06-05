@@ -1,0 +1,155 @@
+* {
+  font-family: monospace;
+}
+body {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #16161b;
+  height: 100vh;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: fit-content;
+  padding: 50px;
+}
+.container p {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+  margin-top: 0;
+}
+.container form {
+  display: flex;
+  flex-direction: column-reverse;
+  transition: all 0.3s ease;
+}
+.container form p {
+  color: #c0c0c0;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.container form p a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  width: fit-content;
+  transition: all 0.5s ease;
+}
+.container form p a:hover {
+  color: lightblue;
+}
+.container form button {
+  width: fit-content;
+  align-self: flex-end;
+  color: white;
+  border: 2px solid #515161;
+  border-radius: 5px;
+  background-color: transparent;
+  padding: 3px 25px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition-delay: 300ms;
+  transition: all 0.3s ease;
+}
+.container form button::before {
+  content: '';
+  background-color: white;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: block;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.container form button::after {
+  content: '';
+  background-color: #16161b;
+  position: absolute;
+  height: 1000%;
+  width: 100%;
+  display: block;
+  z-index: -1;
+  transition: all 0.3s ease;
+  transform: rotateZ(-45deg);
+}
+.container form button:hover {
+  color: #16161b;
+}
+.container form button:hover::after {
+  height: 0%;
+}
+.container form input {
+  padding-bottom: 10px;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  color: white;
+  transition: all 0.3s ease;
+  margin: 20px 0;
+}
+.container form input:focus {
+  outline: none;
+}
+.container form label {
+  width: fit-content;
+  margin-top: 8px;
+  font-size: 18px;
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(1, -0.5, 0.1, 1.5);
+  margin-bottom: -45px;
+  pointer-events: none;
+  user-select: none;
+}
+.container #username:focus ~ .label1 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.container #username:placeholder-shown ~ .label1 {
+  color: white;
+}
+.container #username:not(:placeholder-shown) ~ .label1 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.container #password:focus ~ .label2 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.container #password:placeholder-shown ~ .label2 {
+  color: white;
+}
+.container #password:not(:placeholder-shown) ~ .label2 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.container #confirm:focus ~ .label3 {
+  letter-spacing: 5px;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.container #confirm:placeholder-shown ~ .label3 {
+  color: white;
+}
+.container #confirm:not(:placeholder-shown) ~ .label3 {
+  color: lime;
+  margin-bottom: 0;
+  font-size: 30px;
+}

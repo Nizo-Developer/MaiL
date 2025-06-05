@@ -10,14 +10,15 @@
 }
 
 .sidebar-wrapper {
-  --border-width: 2px;
+  --border-width: 1px;
   
-  height: 100dvh;
+  height: calc(100dvh - 43px);
   width: calc(var(--width) - (var(--width) - var(--border-width) - 25px));
   position: fixed;
   z-index: 10;
-  border-right: 2px solid white;
-  padding-block: 18px;
+  border-right: var(--border-width) solid #515161;
+  border-radius: 0 15px 15px 0;
+  padding-block: 21.5px;
   padding-inline: calc((var(--width) - var(--border-width) - 25px) / 2);
   display: flex;
   flex-direction: column;
@@ -62,7 +63,8 @@
     bottom: 0;
     flex-direction: row;
     border: none;
-    border-top: 2px solid white;
+    border-top: 1px solid #515161;
+    border-radius: 10px 10px 0 0 ;
     padding: unset;
     transition: width 0s;
   }
