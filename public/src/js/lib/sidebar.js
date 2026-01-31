@@ -1,7 +1,7 @@
-import { envelopeResponsive } from "../../../component/envelope/envelope.js";
-import { responsive } from "../../../component/main/main.js";
+import { envelopeResponsive } from "../../../pages/envelope/envelope.js";
+import { responsive } from "../../../pages/main/main.js";
 import { checkUser } from "../module/module.mjs";
-import { loadPage } from "./opg.js";
+import { dataUser, loadPage } from "./opg.js";
 import { changeMonoSvg } from "./tool.js";
 
 const sidebarBtn = document.querySelector('#sidebar');
@@ -96,29 +96,31 @@ function toggleSidebar(e, type) {
 }
 
 export async function colorChange(color) {
-  const sidebar = document.querySelector('.sidebar-wrapper');
-  const menuText = document.querySelectorAll('.menu .hide p')
-  const svg = sidebar.querySelectorAll('img')
-  
-  const check = await checkUser();
-  
-  if (check) {
-    const acc = document.querySelector('#user');
-    const accSvg = acc.querySelector('img');
+  if (dataUser.data.length > 0) {
+    const sidebar = document.querySelector('.sidebar-wrapper');
+    const menuText = document.querySelectorAll('.menu .hide p')
+    const svg = sidebar.querySelectorAll('img')
     
-    changeMonoSvg(accSvg.attributes[0].value, color, accSvg);
-
-    acc.style.color = color;
-    acc.style.borderColor = color;
+    const check = await checkUser();
+    
+    if (check) {
+      const acc = document.querySelector('#user');
+      const accSvg = acc.querySelector('img');
+      
+      changeMonoSvg(accSvg.attributes[0].value, color, accSvg);
+    
+      acc.style.color = color;
+      acc.style.borderColor = color;
+    }
+    
+    menuText.forEach(e => {
+      e.style.color = color;
+    })
+    
+    svg.forEach(e => {
+      const url = e.attributes[0].value;
+    
+      changeMonoSvg(url, color, e)
+    })
   }
-
-  menuText.forEach(e => {
-    e.style.color = color;
-  })
-
-  svg.forEach(e => {
-    const url = e.attributes[0].value;
-
-    changeMonoSvg(url, color, e)
-  })
 }

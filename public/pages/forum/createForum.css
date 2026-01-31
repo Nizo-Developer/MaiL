@@ -30,6 +30,7 @@
   background-color: #16161b;
   height: calc(100vh - 80px);
   width: calc(100vw - 80px);
+  position: relative;
 }
 
 .panel form {
@@ -38,4 +39,27 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+#closePanel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  top: 20px;
+  right: 20px;
+  background-color: rgb(212, 30, 30);
+  border: 1px solid rgb(212, 30, 30);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#closePanel:hover {
+  background-color: rgb(212, 79, 79);
+}
+#closePanel:active {
+  background-color: transparent;
+  border-color: white;
 }

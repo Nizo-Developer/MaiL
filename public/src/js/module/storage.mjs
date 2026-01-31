@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getFirestore, doc, collection, setDoc, addDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import { getFirestore, query, doc, collection, setDoc, addDoc, getDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { setupConfig, checkUser, database, timeNow } from "./module.mjs";
 
 const firebaseConfig = {
@@ -47,6 +47,28 @@ export async function getData(path) {
     } else {
       console.error("Not Found");
       window.location.href = './404.html'
+    }
+  } catch (error) {
+    console.error("Error: " + error);
+  }
+}
+
+export async function getMultipleData(path, where) {
+  const pathArray = path.split("/");
+  let q = collection(db, "data", ...pathArray);
+
+  if (where) {
+    const child = Object.entries(where);
+    const conditions = child.map(([property, value]) => where(property, '==', value));
+
+    q = query(q, ...conditions);
+  }
+
+  try {
+    const docData = await getDocs(q);
+
+    if (docData.exists()) {
+      return docData.data();
     }
   } catch (error) {
     console.error("Error: " + error);
@@ -161,6 +183,37 @@ export async function postForum(title, type) {
 
   } catch (error) {
     console.error("Error saving data: ", error);
+  }
+}
+
+export async function allForum() {
+  try {
+
+    const path = "forum/data/";
+    console.log('pppp')
+    const result = await getMultipleData(path, {
+      author: localStorage.getItem('userId')
+    });
+    console.log('pppp')
+
+    console.log(result)
+
+    const pictures = result.pictures ? await getPicture(result.pictures) : null;
+    
+    const data = {
+      author: result.author,
+      title: result.title,
+      description: result.description,
+      config: result.config,
+      pictures: pictures,
+    };
+
+    console.log(data)
+
+    return data;
+
+  } catch (error) {
+    console.error();
   }
 }
 

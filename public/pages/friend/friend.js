@@ -3,6 +3,7 @@ import { addFriend, unFriend, acceptFriend, getAllFriend } from '../../src/js/mo
 import { mode, portal } from '../../src/js/lib/tool.js';
 import { readingToken } from '../../src/js/module/module.mjs';
 import { loadPage } from '../../src/js/lib/opg.js';
+import { CPATH } from '../../src/js/lib/path.js';
 
 
 
@@ -11,9 +12,9 @@ export function friendLoad() {
   const script = document.querySelector('#scriptOpg');
   const main = document.querySelector('.main');
 
-  style.href = './component/friend/friend.css';
+  style.href = CPATH.page + '/friend/friend.css';
 
-  script.src = './component/friend/friend.js';
+  script.src = CPATH.page + '/friend/friend.js';
 
   main.innerHTML = `
     <div class="acc-container"></div>
@@ -84,8 +85,6 @@ export function friendLoad() {
   }
   
   (async () => {
-    
-    await loadAcc();
     
     const auth = await readingToken();
     

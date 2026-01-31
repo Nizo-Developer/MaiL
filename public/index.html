@@ -14,10 +14,10 @@
   <link id="styleOpg" rel="stylesheet" href="">
   <link rel="stylesheet" href="./src/css/sidebar.css">
   <link rel="stylesheet" href="./src/css/sidebar.css">
-  <link rel="stylesheet" href="./component/share-part/share.css">
-  <link rel="stylesheet" href="./component/profile-part/profile.css">
-  <link rel="stylesheet" href="./component/up-image-part/up-image.css">
-  <link rel="stylesheet" href="./component/forum/createForum.css">
+  <link rel="stylesheet" href="./components/share-part/share.css">
+  <link rel="stylesheet" href="./components/profile-part/profile.css">
+  <link rel="stylesheet" href="./components/up-image-part/up-image.css">
+  <link rel="stylesheet" href="./pages/forum/createForum.css">
   <link rel="stylesheet" href="./src/css/nav.css">
   <link rel="stylesheet" href="./src/css/new.css">
   <link rel="icon" href="./asset/favicon/favicon.ico" type="image/x-icon">
@@ -150,7 +150,7 @@
               <label for="search">Search:</label>
             </div>
             <div id="back">
-              X
+              ✖
             </div>
           </div>
           <div class="share-friend">
@@ -169,9 +169,10 @@
     <div id="createForum">
       <div class="background"></div>
       <div class="panel">
+        <button id="closePanel">✖</button>
         <form>
           <div class="input-wrapper">
-            <input name="forumTitle" id="forumTitle" placeholder=" ">
+            <input name="forumTitle" id="forumTitle" placeholder=" " required>
             <label for="forumTitle">Forum Title</label>
           </div>
           <fieldset class="forum-type">
@@ -191,9 +192,9 @@
   </section>
   <script id="scriptOpg" type="module" src=""></script>
   <script type="module" src="./src/js/lib/sidebar.js"></script>
-  <script type="module" src="./component/share-part/share.js"></script>
-  <script type="module" src="./component/profile-part/profile.js"></script>
-  <script type="module" src="./component/up-image-part/up-image.js"></script>
+  <script type="module" src="./components/share-part/share.js"></script>
+  <script type="module" src="./components/profile-part/profile.js"></script>
+  <script type="module" src="./components/up-image-part/up-image.js"></script>
   <script type="module" src="./src/js/lib/opg.js"></script>
   <script type="module" src="./src/js/module/IndexdbHandler.mjs"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>

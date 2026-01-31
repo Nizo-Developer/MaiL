@@ -1,11 +1,12 @@
-import { toggleProfile } from '../../../component/profile-part/profile.js';
+import { toggleProfile } from '../../../components/profile-part/profile.js';
 import { readingToken } from '../module/module.mjs';
+import { dataUser } from './opg.js';
 
 
 export async function loadAcc(path = './') {
   const accWrap = document.querySelector('.acc-container');
   const account = await readingToken();
-  console.log(account)
+  dataUser.data = account
 
   if (account && localStorage.getItem('token')) {
     const username = document.createElement('div')

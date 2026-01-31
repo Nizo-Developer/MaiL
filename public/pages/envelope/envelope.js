@@ -3,16 +3,17 @@ import { loadPage } from "../../src/js/lib/opg.js";
 import { editMessage } from "../../src/js/lib/tool.js";
 import { checkUser, getAllMessage, readingToken } from "../../src/js/module/module.mjs";
 import { getAllSharedMessage } from "../../src/js/module/share.mjs";
-import { toggleShare } from "../share-part/share.js";
+import { toggleShare } from "../../components/share-part/share.js";
+import { CPATH } from "../../src/js/lib/path.js";
 
 export function envelopeLoad() {
   const style = document.querySelector('#styleOpg');
   const script = document.querySelector('#scriptOpg');
   const main = document.querySelector('.main');
   
-  style.href = './component/envelope/envelope.css';
+  style.href = CPATH.page + '/envelope/envelope.css';
   
-  script.src = './component/envelope/envelope.js';
+  script.src = CPATH.page + '/envelope/envelope.js';
   
   main.innerHTML = `
     <div class="acc-container"></div>
@@ -57,9 +58,6 @@ export function envelopeLoad() {
   }
   
   (async () => {
-    
-    await loadAcc();
-    
     const auth = await readingToken();
     
     if (!auth) {
